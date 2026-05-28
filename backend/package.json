@@ -7,10 +7,10 @@
     "start": "cross-env NODE_ENV=production node dist/server.js",
     "build": "rimraf dist && tsc && tsc-alias",
     "lint": "eslint src/**/*.ts",
-    "seed:admin": "tsx src/seeders/user.seeder.ts seed",
-    "seed:admin:clear": "tsx src/seeders/user.seeder.ts clear",
-    "seed:criteria:up": "tsx src/seeders/criteria.seeder.ts up",
-    "seed:criteria:down": "tsx src/seeders/criteria.seeder.ts down"
+    "seed:admin": "tsx src/seeders/admin.seed.ts seed",
+    "seed:admin:clear": "tsx src/seeders/admin.seed.ts clear",
+    "seed:car": "tsx src/seeders/cars.seed.ts seed",
+    "seed:car:clear": "tsx src/seeders/cars.seed.ts clear"
   },
   "keywords": [],
   "author": "",

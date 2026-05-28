@@ -32,6 +32,10 @@ export const loadEnv = () => {
       REFRESH_SECRET: getEnv('JWT_REFRESH_TOKEN_KEY'),
       EXPIRES_IN: getEnv('JWT_EXPIRES_IN'),
     },
+    ADMIN: {
+      EMAIL: getEnv('ADMIN_EMAIL'),
+      PASSWORD: getEnv('ADMIN_PASSWORD'),
+    },
 
     CLIENT_URL: getEnv('CLIENT_URL'),
   };
