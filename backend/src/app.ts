@@ -6,6 +6,7 @@ import { loadEnv } from './config/env';
 import { AppError } from './common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from './common/error/http';
 import auhtRouter from './modules/auth/auth.route';
+import anpRouter from './modules/anp/anp.route';
 
 const env = loadEnv();
 
@@ -26,6 +27,7 @@ app.use(
 
 // route
 app.use('/api/v1/auth', auhtRouter);
+app.use('/api/v1/anp', anpRouter);
 
 // not found error
 app.use((_req, _res, next) => {

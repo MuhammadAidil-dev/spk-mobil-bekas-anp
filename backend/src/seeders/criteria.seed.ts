@@ -35,6 +35,33 @@ export const criteriaSeed = [
   },
 ];
 
+export const DEFAULT_CRITERIA = [
+  {
+    code: 'PRICE',
+    name: 'Harga',
+    type: 'cost',
+    order: 1,
+  },
+  {
+    code: 'MILEAGE',
+    name: 'Kilometer',
+    type: 'cost',
+    order: 2,
+  },
+  {
+    code: 'ENGINE_CAPACITY',
+    name: 'Kapasitas Mesin',
+    type: 'benefit',
+    order: 3,
+  },
+  {
+    code: 'SEAT_CAPACITY',
+    name: 'Kapasitas Kursi',
+    type: 'benefit',
+    order: 4,
+  },
+];
+
 const up = async () => {
   for (const data of criteriaSeed) {
     await Criteria.create(data);
