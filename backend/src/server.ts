@@ -1,3 +1,4 @@
+import 'module-alias/register';
 import app from './app';
 import { connectDb } from './config/database.config';
 import { loadEnv } from './config/env';
