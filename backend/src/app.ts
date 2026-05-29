@@ -5,6 +5,7 @@ import { errorMiddleware } from './middleware/errorMiddleware';
 import { loadEnv } from './config/env';
 import { AppError } from './common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from './common/error/http';
+import auhtRouter from './modules/auth/auth.route';
 
 const env = loadEnv();
 
@@ -24,8 +25,7 @@ app.use(
 // app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // route
-// app.use('/api/v1/auth', auhtRouter);
-// app.use('/api/v1/criteria', criteriaRouter);
+app.use('/api/v1/auth', auhtRouter);
 
 // not found error
 app.use((_req, _res, next) => {

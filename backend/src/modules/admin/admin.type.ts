@@ -1,3 +1,4 @@
+import { boolean } from 'joi';
 import { Document, Types } from 'mongoose';
 
 export interface IAdmin {
@@ -9,4 +10,8 @@ export interface IAdmin {
   updatedAt?: Date;
 }
 
-export type IAdminDocument = IAdmin & Document;
+export type IAdminDocument = IAdmin &
+  Document & {
+    comparePassword: (password: string) => Promise<boolean>;
+  };
+export type IAdminResponse = Omit<IAdmin, 'password_hash'>;
