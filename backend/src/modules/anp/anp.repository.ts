@@ -1,10 +1,9 @@
 import { CarModel } from '../cars/car.model';
+import { ICar } from '../cars/car.type';
 
 class AnpRepository {
-  async findActiveCars() {
-    return CarModel.find({
-      is_active: true,
-    }).lean();
+  async findActiveCars(): Promise<ICar[]> {
+    return CarModel.find({ is_active: true }).lean();
   }
 }
 

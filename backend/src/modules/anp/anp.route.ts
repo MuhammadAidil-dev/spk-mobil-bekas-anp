@@ -1,7 +1,6 @@
 import { Router } from 'express';
-
-import { anpController } from './anp.controller';
 import { asyncHandler } from '@/middleware/asyncHandler';
+import { anpController } from './anp.controller';
 
 const anpRouter = Router();
 
