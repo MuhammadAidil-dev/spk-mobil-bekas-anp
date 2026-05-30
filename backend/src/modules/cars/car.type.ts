@@ -34,3 +34,20 @@ export interface ICar {
 }
 
 export type ICarDocument = ICar & Document;
+export type CreateCarDTO = Pick<
+  ICar,
+  | 'brand'
+  | 'model'
+  | 'year'
+  | 'year'
+  | 'price'
+  | 'mileage'
+  | 'engine_capacity'
+  | 'seat_capacity'
+  | 'transmission'
+  | 'fuel_type'
+  | 'color'
+  | 'plate_region'
+  | 'image_url'
+  | 'description'
+>;
