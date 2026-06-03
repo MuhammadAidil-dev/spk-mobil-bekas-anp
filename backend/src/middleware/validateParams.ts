@@ -2,16 +2,13 @@ import { ERROR_CODE, HTTP_CODE } from '@/common/error/http';
 import { Request, Response, NextFunction } from 'express';
 import { ObjectSchema } from 'joi';
 
-export const validate = (schema: ObjectSchema) => {
+export const validateParams = (schema: ObjectSchema) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { error, value } = schema.validate(req.body, {
+    const { error, value } = schema.validate(req.params, {
       abortEarly: false, // Validasi semua payload, jangan berhenti di field error pertama,
       stripUnknown: true, // buang field yang tidak ada di schema
-      convert: true,
     });
 
-    // Ubah array detail error menjadi object { field: message }
-    // Contoh: { email: "Email wajib diisi", password: "Password wajib diisi" }
     if (error) {
       const errors = error.details.reduce<Record<string, string>>(
         (acc, detail) => {

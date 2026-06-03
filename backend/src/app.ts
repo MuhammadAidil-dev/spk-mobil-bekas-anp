@@ -5,6 +5,10 @@ import { errorMiddleware } from './middleware/errorMiddleware';
 import { loadEnv } from './config/env';
 import { AppError } from './common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from './common/error/http';
+import auhtRouter from './modules/auth/auth.route';
+import anpRouter from './modules/anp/anp.route';
+import carRouter from './modules/cars/car.route';
+import path from 'path';
 
 const env = loadEnv();
 
@@ -21,11 +25,12 @@ app.use(
 );
 
 // middleware upload file
-// app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // route
-// app.use('/api/v1/auth', auhtRouter);
-// app.use('/api/v1/criteria', criteriaRouter);
+app.use('/api/v1/auth', auhtRouter);
+app.use('/api/v1/anp', anpRouter);
+app.use('/api/v1/cars', carRouter);
 
 // not found error
 app.use((_req, _res, next) => {

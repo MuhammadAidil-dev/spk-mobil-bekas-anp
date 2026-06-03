@@ -1,14 +1,18 @@
 import { connectDb, disconnectDB } from '@/config/database.config';
 import { loadEnv } from '@/config/env';
-import { carSeed } from '@/constants/car.constants';
-import { CarModel } from '@/modules/cars/car.model';
+import { Admin } from '@/modules/admin/admin.model';
 
 const env = loadEnv();
 
 const up = async () => {
-  for (const data of carSeed) {
-    await CarModel.create(data);
-  }
+  const adminData = {
+    email: env.ADMIN.EMAIL,
+    password_hash: env.ADMIN.PASSWORD,
+    name: 'admin-mobil',
+  };
+
+  await Admin.create(adminData);
+  console.log('Data admin berhasil ditambahkan');
 };
 
 const down = async () => {
@@ -17,7 +21,7 @@ const down = async () => {
       '❌ Perintah clear tidak diizinkan di environment production!',
     );
   }
-  return await CarModel.deleteMany();
+  return await Admin.deleteMany();
 };
 
 const runSeed = async () => {
@@ -28,7 +32,7 @@ const runSeed = async () => {
 
     if (arg === 'clear') {
       await down();
-      console.log('Data car berhasil dihapus');
+      console.log('Data admin berhasil dihapus');
     } else {
       await up();
     }
