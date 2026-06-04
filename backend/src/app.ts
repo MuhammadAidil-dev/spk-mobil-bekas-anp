@@ -9,6 +9,7 @@ import auhtRouter from './modules/auth/auth.route';
 import anpRouter from './modules/anp/anp.route';
 import carRouter from './modules/cars/car.route';
 import path from 'path';
+import newCarRouter from './modules/newCars/newCar.route';
 
 const env = loadEnv();
 
@@ -31,6 +32,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use('/api/v1/auth', auhtRouter);
 app.use('/api/v1/anp', anpRouter);
 app.use('/api/v1/cars', carRouter);
+app.use('/api/v1/new-cars', newCarRouter);
 
 // not found error
 app.use((_req, _res, next) => {

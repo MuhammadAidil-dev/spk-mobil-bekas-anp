@@ -12,6 +12,8 @@
     "seed:admin:clear": "tsx src/seeders/admin.seed.ts clear",
     "seed:car": "tsx src/seeders/cars.seed.ts seed",
     "seed:car:clear": "tsx src/seeders/cars.seed.ts clear",
+    "seed:new-car": "tsx src/seeders/newCars.seed.ts seed",
+    "seed:new-car:clear": "tsx src/seeders/newCars.seed.ts clear",
     "seed:criteria": "tsx src/seeders/criteria.seed.ts seed",
     "seed:criteria:clear": "tsx src/seeders/criteria.seed.ts clear"
   },

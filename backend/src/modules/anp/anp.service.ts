@@ -23,6 +23,7 @@ import {
 
 import { anpRepository } from './anp.repository';
 import { criteriaRepository } from '../criteria/criteria.repository';
+import { ICar } from '../cars/car.type';
 
 // ============================================================
 // TIPE RETURN SERVICE
@@ -35,8 +36,7 @@ interface AnpWeightItem {
 
 interface AnpRankingItem {
   rank_position: number;
-  car_id: string;
-  car_name: string;
+  data_car: ICar;
   normalized_scores: {
     price: number;
     mileage: number;
@@ -188,8 +188,7 @@ class AnpService {
         normalizedSeat * normalizedFinalWeights[CRITERIA_INDEX.SEAT_CAPACITY];
 
       return {
-        car_id: (car._id as { toString(): string }).toString(),
-        car_name: `${car.brand} ${car.model}`,
+        data_car: { ...car },
         normalized_scores: {
           price: roundDecimal(normalizedPrice),
           mileage: roundDecimal(normalizedMileage),
