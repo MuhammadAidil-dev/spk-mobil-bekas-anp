@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'source.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.spkmobil.my.id',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };
