@@ -6,7 +6,6 @@ const CriteriaSchema = new Schema<ICriteriaDocument>(
     code: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
       uppercase: true,
     },

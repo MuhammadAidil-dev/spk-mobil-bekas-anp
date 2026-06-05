@@ -6,7 +6,22 @@ import { login } from '@/services/auth.service';
 
 const TOKEN_KEY = 'accessToken';
 const USER_KEY = 'user_info';
-const TOKEN_MAX_AGE = 60 * 60 * 8; // 8 hours
+
+/**
+ * Decode JWT exp claim (seconds) and return remaining seconds from now.
+ * Falls back to 8 hours if the token is malformed.
+ */
+function getTokenMaxAge(token: string): number {
+  try {
+    const payload = JSON.parse(
+      Buffer.from(token.split('.')[1], 'base64url').toString('utf-8'),
+    ) as { exp?: number };
+    if (!payload.exp) return 60 * 60 * 8;
+    return Math.max(0, payload.exp - Math.floor(Date.now() / 1000));
+  } catch {
+    return 60 * 60 * 8;
+  }
+}
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
@@ -16,13 +31,17 @@ export async function loginAction(formData: FormData) {
   if (!result.success) return result;
 
   const cookieStore = await cookies();
+  const maxAge = getTokenMaxAge(result.data.accessToken);
+  const cookieBase = {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    maxAge,
+    path: '/',
+  };
 
   cookieStore.set(TOKEN_KEY, result.data.accessToken, {
+    ...cookieBase,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: TOKEN_MAX_AGE,
-    path: '/',
   });
 
   // Non-httpOnly cookie — only stores display info (name, email), no secrets
@@ -33,13 +52,7 @@ export async function loginAction(formData: FormData) {
       name: result.data.user.name,
       email: result.data.user.email,
     }),
-    {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: TOKEN_MAX_AGE,
-      path: '/',
-    },
+    { ...cookieBase, httpOnly: false },
   );
 
   redirect('/admin/dashboard');
