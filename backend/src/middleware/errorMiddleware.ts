@@ -51,8 +51,8 @@ export const errorMiddleware = (
     code = ERROR_CODE.DUPLICATE_KEY;
   }
 
-  // Logging
-  if (env.NODE_ENV === 'development') {
+  // Logging — skip 404 karena itu normal (client akses URL salah)
+  if (env.NODE_ENV === 'development' && statusCode !== HTTP_CODE.NOT_FOUND) {
     console.error('ERROR:', err);
   }
 
