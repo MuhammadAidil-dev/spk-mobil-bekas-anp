@@ -1,311 +1,417 @@
+'use client';
+
+import { useState, useTransition } from 'react';
 import {
+  AlertCircle,
   CheckCircle,
   Eye,
+  Gauge,
+  Loader2,
   RefreshCw,
-  Grid2X2,
-  BarChart3,
-  Table2,
-  Layers3,
-  Trophy,
+  Sparkles,
 } from 'lucide-react';
+import Link from 'next/link';
+import {
+  recalculateAnpAction,
+  recalculateNewCarAnpAction,
+} from '@/actions/anp.action';
+import type { AnpResult, NewCarAnpResult } from '@/types/api.type';
 
-interface RankingResult {
-  id: string;
-  rank: number;
-  score: number;
-  car: {
-    brand: string;
-    model: string;
-    year: number;
-  };
+interface AnpEngineViewProps {
+  anpData: AnpResult;
+  newCarAnpData: NewCarAnpResult;
 }
 
-const rankingResults: RankingResult[] = [
-  {
-    id: '1',
-    rank: 1,
-    score: 0.9421,
-    car: {
-      brand: 'Toyota',
-      model: 'Avanza 1.5 G',
-      year: 2022,
-    },
-  },
-  {
-    id: '2',
-    rank: 2,
-    score: 0.8954,
-    car: {
-      brand: 'Honda',
-      model: 'Mobilio E',
-      year: 2021,
-    },
-  },
-  {
-    id: '3',
-    rank: 3,
-    score: 0.8812,
-    car: {
-      brand: 'Suzuki',
-      model: 'Ertiga GX',
-      year: 2022,
-    },
-  },
-  {
-    id: '4',
-    rank: 4,
-    score: 0.8432,
-    car: {
-      brand: 'Mitsubishi',
-      model: 'Xpander Sport',
-      year: 2021,
-    },
-  },
-  {
-    id: '5',
-    rank: 5,
-    score: 0.8125,
-    car: {
-      brand: 'Toyota',
-      model: 'Rush TRD',
-      year: 2020,
-    },
-  },
-  {
-    id: '6',
-    rank: 6,
-    score: 0.7651,
-    car: {
-      brand: 'Daihatsu',
-      model: 'Terios R',
-      year: 2020,
-    },
-  },
-  {
-    id: '7',
-    rank: 7,
-    score: 0.7428,
-    car: {
-      brand: 'Honda',
-      model: 'BR-V',
-      year: 2019,
-    },
-  },
-  {
-    id: '8',
-    rank: 8,
-    score: 0.7104,
-    car: {
-      brand: 'Nissan',
-      model: 'Livina VL',
-      year: 2020,
-    },
-  },
-];
+type Tab = 'bekas' | 'baru';
 
-const processSteps = [
-  {
-    label: 'Pairwise Matrix',
-    icon: Grid2X2,
-    active: true,
-  },
-  {
-    label: 'Normalization',
-    icon: BarChart3,
-    active: false,
-  },
-  {
-    label: 'Supermatrix',
-    icon: Table2,
-    active: false,
-  },
-  {
-    label: 'Limit Matrix',
-    icon: Layers3,
-    active: false,
-  },
-  {
-    label: 'Final Ranking',
-    icon: Trophy,
-    active: true,
-  },
-];
+export default function AnpEngineView({
+  anpData,
+  newCarAnpData,
+}: AnpEngineViewProps) {
+  const [activeTab, setActiveTab] = useState<Tab>('bekas');
+  const [usedCarData, setUsedCarData] = useState<AnpResult>(anpData);
+  const [newCarData, setNewCarData] = useState<NewCarAnpResult>(newCarAnpData);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
-export default function AnpEngineView() {
+  function handleRecalculate() {
+    setError(null);
+    startTransition(async () => {
+      if (activeTab === 'bekas') {
+        const result = await recalculateAnpAction();
+        if (result.success) setUsedCarData(result.data);
+        else setError(result.error.message);
+      } else {
+        const result = await recalculateNewCarAnpAction();
+        if (result.success) setNewCarData(result.data);
+        else setError(result.error.message);
+      }
+    });
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <h1 className="text-3xl font-bold text-foreground">
-          ANP Calculation Engine
-        </h1>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
+            ANP Calculation Engine
+          </h1>
+          <p className="mt-1 text-sm text-secondary">
+            Hitung ulang ranking ANP untuk mobil bekas atau mobil baru.
+          </p>
+        </div>
 
-        <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-white transition hover:opacity-90 cursor-pointer">
-          <RefreshCw size={18} />
-          Recalculate
+        <button
+          onClick={handleRecalculate}
+          disabled={isPending}
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 font-medium text-white transition hover:opacity-90 disabled:opacity-60"
+        >
+          {isPending ? (
+            <Loader2 size={18} className="animate-spin" />
+          ) : (
+            <RefreshCw size={18} />
+          )}
+          {isPending ? 'Menghitung...' : 'Recalculate'}
         </button>
       </div>
 
-      {/* Stepper */}
-      {/* <section className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
-        <div className="relative flex justify-between">
-          <div className="absolute top-6 left-0 right-0 h-0.5 bg-slate-200" />
-
-          {processSteps.map((step) => {
-            const Icon = step.icon;
-
-            return (
-              <div
-                key={step.label}
-                className="relative z-10 flex flex-col items-center gap-3"
-              >
-                <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-full border-2 bg-white ${
-                    step.active
-                      ? 'border-primary text-primary'
-                      : 'border-slate-300 text-slate-400'
-                  }`}
-                >
-                  <Icon size={20} />
-                </div>
-
-                <span
-                  className={`text-sm font-medium ${
-                    step.active ? 'text-primary' : 'text-slate-500'
-                  }`}
-                >
-                  {step.label}
-                </span>
-              </div>
-            );
-          })}
+      {/* Error */}
+      {error && (
+        <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
+          <AlertCircle size={18} className="shrink-0" />
+          {error}
         </div>
-      </section> */}
+      )}
 
-      {/* Summary */}
-      <section className="grid gap-6 md:grid-cols-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="mb-2 text-xs uppercase tracking-wider text-secondary">
-            Total Alternatives
-          </p>
+      {/* Tabs */}
+      <div className="flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
+        <button
+          onClick={() => setActiveTab('bekas')}
+          className={`flex items-center gap-1.5 rounded-lg px-5 py-2.5 text-sm font-medium transition ${
+            activeTab === 'bekas'
+              ? 'bg-white text-primary shadow-sm'
+              : 'text-secondary hover:text-foreground'
+          }`}
+        >
+          <Gauge size={15} />
+          Mobil Bekas
+        </button>
+        <button
+          onClick={() => setActiveTab('baru')}
+          className={`flex items-center gap-1.5 rounded-lg px-5 py-2.5 text-sm font-medium transition ${
+            activeTab === 'baru'
+              ? 'bg-white text-primary shadow-sm'
+              : 'text-secondary hover:text-foreground'
+          }`}
+        >
+          <Sparkles size={15} />
+          Mobil Baru
+        </button>
+      </div>
 
-          <div className="flex items-end gap-2">
-            <span className="text-4xl font-bold">42</span>
+      {activeTab === 'bekas' ? (
+        <UsedCarPanel data={usedCarData} />
+      ) : (
+        <NewCarPanel data={newCarData} />
+      )}
+    </div>
+  );
+}
 
-            <span className="text-sm font-medium text-tertiary">
-              +3 since last run
-            </span>
-          </div>
-        </div>
+/* ─── Used Car Panel ──────────────────────────────────────────── */
 
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="mb-2 text-xs uppercase tracking-wider text-secondary">
-            Criteria Count
-          </p>
+function UsedCarPanel({ data }: { data: AnpResult }) {
+  const { rankings, consistency, weights } = data;
 
-          <div className="flex items-end gap-2">
-            <span className="text-4xl font-bold">4</span>
+  return (
+    <>
+      <SummaryCards
+        candidateCount={rankings.length}
+        criteriaCount={weights.length}
+        consistency={consistency}
+      />
 
-            <span className="text-sm text-secondary">Fixed Criteria</span>
-          </div>
-        </div>
+      <WeightsSection
+        weights={weights.map((w) => ({
+          code: w.criteria_code,
+          name: w.criteria_name,
+          weight: w.weight,
+        }))}
+      />
 
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="mb-2 text-xs uppercase tracking-wider text-secondary">
-            Consistency Ratio
-          </p>
-
-          <div className="flex items-center gap-3">
-            <div className="h-3 w-3 rounded-full bg-tertiary" />
-
-            <span className="text-4xl font-bold">0.082</span>
-
-            <span className="rounded bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-              CONSISTENT
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* Result Header */}
       <section className="space-y-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <h2 className="text-2xl font-semibold">Ranking Results</h2>
-
-          <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-medium text-tertiary">
-            <CheckCircle size={16} />
-            Calculation completed successfully
-          </div>
+          <h2 className="text-xl font-semibold">Ranking — Mobil Bekas</h2>
+          <ConsistencyBadge isConsistent={consistency.isConsistent} />
         </div>
 
-        {/* Table */}
-        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-            <h3 className="font-semibold">Full Ranking Table</h3>
-
-            <button className="font-medium text-primary hover:underline">
-              Export Results
-            </button>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-neutral">
-                <tr className="text-left text-xs uppercase tracking-wider text-secondary">
-                  <th className="px-6 py-4">Rank</th>
-                  <th className="px-6 py-4">Vehicle</th>
-                  <th className="px-6 py-4">Score</th>
-                  <th className="px-6 py-4">Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {rankingResults.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="border-t border-slate-100 hover:bg-slate-50"
-                  >
-                    <td className="px-6 py-4">
-                      <span
-                        className={
-                          item.rank === 1
-                            ? 'font-bold text-primary'
-                            : 'font-semibold'
-                        }
-                      >
-                        #{item.rank}
-                      </span>
-                    </td>
-
-                    <td className="px-6 py-4">
-                      <div>
-                        <p className="font-medium">
-                          {item.car.brand} {item.car.model}
-                        </p>
-
-                        <p className="text-sm text-secondary">
-                          {item.car.year}
-                        </p>
-                      </div>
-                    </td>
-
-                    <td className="px-6 py-4 font-mono">
-                      {item.score.toFixed(4)}
-                    </td>
-
-                    <td className="px-6 py-4">
-                      <button className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-secondary transition hover:bg-slate-200">
-                        <Eye size={16} />
-                        Detail
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <RankingTable
+          rows={rankings.map((item) => ({
+            id: item.data_car._id,
+            rank: item.rank_position,
+            label: `${item.data_car.brand} ${item.data_car.model}`,
+            year: item.data_car.year,
+            score: item.final_score,
+            detailHref: `/cars/${item.data_car._id}`,
+          }))}
+        />
       </section>
+    </>
+  );
+}
+
+/* ─── New Car Panel ───────────────────────────────────────────── */
+
+function NewCarPanel({ data }: { data: NewCarAnpResult }) {
+  const { rankings, consistency, weights } = data;
+
+  return (
+    <>
+      <SummaryCards
+        candidateCount={rankings.length}
+        criteriaCount={weights.length}
+        consistency={consistency}
+      />
+
+      <WeightsSection
+        weights={weights.map((w) => ({
+          code: w.criteria_code,
+          name: w.criteria_name,
+          weight: w.weight,
+          type: w.type,
+        }))}
+      />
+
+      <section className="space-y-4">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <h2 className="text-xl font-semibold">Ranking — Mobil Baru</h2>
+          <ConsistencyBadge isConsistent={consistency.isConsistent} />
+        </div>
+
+        <RankingTable
+          rows={rankings.map((item) => ({
+            id: item.data_cars._id,
+            rank: item.rank_position,
+            label: `${item.data_cars.brand} ${item.data_cars.model}`,
+            year: item.data_cars.year,
+            score: item.final_score,
+            detailHref: `/new-cars/${item.data_cars._id}`,
+          }))}
+        />
+      </section>
+    </>
+  );
+}
+
+/* ─── Shared sub-components ───────────────────────────────────── */
+
+function SummaryCards({
+  candidateCount,
+  criteriaCount,
+  consistency,
+}: {
+  candidateCount: number;
+  criteriaCount: number;
+  consistency: { consistencyRatio: number; isConsistent: boolean };
+}) {
+  return (
+    <section className="grid gap-6 md:grid-cols-3">
+      <StatCard
+        label="Total Alternatives"
+        value={candidateCount}
+        unit="kandidat"
+      />
+      <StatCard
+        label="Criteria Count"
+        value={criteriaCount}
+        unit="Fixed Criteria"
+      />
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <p className="mb-2 text-xs uppercase tracking-wider text-secondary">
+          Consistency Ratio
+        </p>
+        <div className="flex items-center gap-3">
+          <div
+            className={`h-3 w-3 rounded-full ${
+              consistency.isConsistent ? 'bg-green-500' : 'bg-red-500'
+            }`}
+          />
+          <span className="text-4xl font-bold">
+            {consistency.consistencyRatio.toFixed(3)}
+          </span>
+          <span
+            className={`rounded px-2 py-1 text-xs font-semibold ${
+              consistency.isConsistent
+                ? 'bg-green-100 text-green-700'
+                : 'bg-red-100 text-red-700'
+            }`}
+          >
+            {consistency.isConsistent ? 'CONSISTENT' : 'INCONSISTENT'}
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  unit,
+}: {
+  label: string;
+  value: number;
+  unit: string;
+}) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <p className="mb-2 text-xs uppercase tracking-wider text-secondary">
+        {label}
+      </p>
+      <div className="flex items-end gap-2">
+        <span className="text-4xl font-bold">{value}</span>
+        <span className="text-sm text-secondary">{unit}</span>
+      </div>
+    </div>
+  );
+}
+
+function WeightsSection({
+  weights,
+}: {
+  weights: { code: string; name: string; weight: number; type?: string }[];
+}) {
+  return (
+    <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+      <h2 className="mb-4 font-semibold">Bobot Kriteria</h2>
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        {weights.map((w) => (
+          <div
+            key={w.code}
+            className="rounded-lg border border-slate-100 bg-slate-50 p-4"
+          >
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold uppercase text-secondary">
+                {w.code}
+              </p>
+              {w.type && (
+                <span
+                  className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
+                    w.type === 'benefit'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-orange-100 text-orange-700'
+                  }`}
+                >
+                  {w.type}
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-foreground">{w.name}</p>
+            <p className="mt-2 text-2xl font-bold text-primary">
+              {(w.weight * 100).toFixed(2)}%
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ConsistencyBadge({ isConsistent }: { isConsistent: boolean }) {
+  return (
+    <div
+      className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-medium sm:px-4 sm:py-2 sm:text-sm ${
+        isConsistent ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+      }`}
+    >
+      <CheckCircle size={15} />
+      {isConsistent ? 'Konsisten' : 'Tidak Konsisten'}
+    </div>
+  );
+}
+
+function RankingTable({
+  rows,
+}: {
+  rows: {
+    id: string;
+    rank: number;
+    label: string;
+    year: number;
+    score: number;
+    detailHref?: string;
+  }[];
+}) {
+  if (rows.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-slate-300 py-16 text-center text-secondary">
+        Belum ada data. Klik Recalculate untuk menghitung.
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="border-b border-slate-200 px-4 py-3 sm:px-6 sm:py-4">
+        <h3 className="font-semibold">Full Ranking Table</h3>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-100">
+          <thead className="bg-neutral">
+            <tr className="text-left text-xs uppercase tracking-wider text-secondary">
+              <th className="px-4 py-3 sm:px-6 sm:py-4">Rank</th>
+              <th className="px-4 py-3 sm:px-6 sm:py-4">Vehicle</th>
+              <th className="px-4 py-3 sm:px-6 sm:py-4">Score</th>
+              <th className="px-4 py-3 sm:px-6 sm:py-4">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {rows.map((row) => (
+              <tr
+                key={row.id}
+                className="border-t border-slate-100 hover:bg-slate-50"
+              >
+                <td className="px-4 py-3 sm:px-6 sm:py-4">
+                  <span
+                    className={
+                      row.rank === 1
+                        ? 'font-bold text-primary'
+                        : 'font-semibold'
+                    }
+                  >
+                    #{row.rank}
+                  </span>
+                </td>
+
+                <td className="px-4 py-3 sm:px-6 sm:py-4">
+                  <p className="font-medium">{row.label}</p>
+                  <p className="text-sm text-secondary">{row.year}</p>
+                </td>
+
+                <td className="px-4 py-3 font-mono sm:px-6 sm:py-4">{row.score.toFixed(4)}</td>
+
+                <td className="px-4 py-3 sm:px-6 sm:py-4">
+                  {row.detailHref ? (
+                    <Link
+                      href={row.detailHref}
+                      className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm font-medium text-secondary transition hover:bg-slate-200"
+                    >
+                      <Eye size={16} />
+                      Detail
+                    </Link>
+                  ) : (
+                    <span className="text-xs text-slate-400">—</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
