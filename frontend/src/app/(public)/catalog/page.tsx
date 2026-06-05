@@ -3,6 +3,8 @@ import CatalogView from '@/features/catalog/components/view/CatalogView';
 import { getCars } from '@/services/cars.service';
 import { getNewCarAnpResult } from '@/services/new-cars.service';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CatalogPage() {
   const [carsResult, newCarResult] = await Promise.all([
     getCars(),

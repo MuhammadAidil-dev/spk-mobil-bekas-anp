@@ -2,6 +2,8 @@ import AnpEngineView from '@/features/anp-engine/components/view/AnpEngineView';
 import { getAnpResult, EMPTY_ANP_RESULT } from '@/services/anp.service';
 import { getNewCarAnpResult, EMPTY_NEW_CAR_ANP_RESULT } from '@/services/new-cars.service';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ANPEnginePage() {
   const [anpResult, newCarResult] = await Promise.all([
     getAnpResult(),
