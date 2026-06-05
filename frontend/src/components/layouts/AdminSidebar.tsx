@@ -64,7 +64,7 @@ export default function AdminSidebar() {
       >
         <div className="w-full">
           {/* Brand + mobile close */}
-          <div className="mt-16 flex items-center gap-2 md:mt-0">
+          <div className="mt-16 flex items-center gap-2 lg:mt-0">
             <span className="flex h-15 w-15 shrink-0 items-center justify-center rounded-md bg-primary">
               <Laptop size={24} color="white" />
             </span>
