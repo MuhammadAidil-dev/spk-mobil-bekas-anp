@@ -2,6 +2,8 @@ import HomeView from '@/components/view/HomeView';
 import { getCars } from '@/services/cars.service';
 import { getNewCarAnpResult } from '@/services/new-cars.service';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const [carsResult, newCarResult] = await Promise.all([
     getCars(),
