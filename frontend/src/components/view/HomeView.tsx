@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-
+import { useState } from 'react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -16,9 +16,12 @@ import {
   Settings,
   Fuel,
   Zap,
+  Sparkles,
+  Droplets,
 } from 'lucide-react';
-import { featuredCars } from '@/data/cars.data';
 import Link from 'next/link';
+import type { ApiCar, NewCarAnpRanking } from '@/types/api.type';
+import { getCarImageUrl } from '@/lib/api';
 
 const formatPrice = (price: number) =>
   new Intl.NumberFormat('id-ID', {
@@ -27,41 +30,50 @@ const formatPrice = (price: number) =>
     maximumFractionDigits: 0,
   }).format(price);
 
-export default function HomeView() {
+interface HomeViewProps {
+  cars: ApiCar[];
+  topNewCars: NewCarAnpRanking[];
+}
+
+type FeaturedTab = 'bekas' | 'baru';
+
+export default function HomeView({ cars, topNewCars }: HomeViewProps) {
+  const [featuredTab, setFeaturedTab] = useState<FeaturedTab>('bekas');
+
   return (
     <div className="pb-12">
       {/* HERO */}
       <section className="relative overflow-hidden bg-white py-20 lg:py-32">
         <div className="container mx-auto">
-          <div className="grid gap-12 lg:grid-cols-2 items-center">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <span className="inline-flex rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-primary">
                 Analytic Network Process Driven
               </span>
 
               <h1 className="mt-6 text-5xl font-bold leading-tight text-foreground">
-                Temukan Mobil Bekas Terbaik dengan{' '}
+                Temukan Mobil Terbaik dengan{' '}
                 <span className="text-primary">Metode ANP</span>
               </h1>
 
               <p className="mt-6 max-w-xl text-lg text-secondary">
-                Sistem pendukung keputusan cerdas yang mempertimbangkan setiap
-                keterkaitan antara kriteria teknis, harga, dan preferensi
-                pribadi Anda.
+                Sistem pendukung keputusan cerdas untuk mobil bekas maupun mobil
+                baru — mempertimbangkan setiap keterkaitan antar kriteria
+                teknis, harga, dan preferensi Anda.
               </p>
 
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <Link
-                  href={'/recomendations'}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 font-semibold text-white hover:bg-primary/80 duration-150"
+                  href="/recomendations"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 font-semibold text-white duration-150 hover:bg-primary/80"
                 >
                   Mulai Analisis
                   <ArrowRight size={18} />
                 </Link>
 
                 <Link
-                  href={'/catalog'}
-                  className="rounded-xl border border-secondary px-8 py-4 font-semibold hover:shadow-md duration-150 hover:text-primary"
+                  href="/catalog"
+                  className="rounded-xl border border-secondary px-8 py-4 font-semibold duration-150 hover:text-primary hover:shadow-md"
                 >
                   Lihat Katalog
                 </Link>
@@ -88,7 +100,6 @@ export default function HomeView() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center">
             <h2 className="text-4xl font-bold">How It Works</h2>
-
             <p className="mt-4 text-secondary">
               Tiga langkah sederhana menuju mobil impian Anda.
             </p>
@@ -121,7 +132,6 @@ export default function HomeView() {
                 </div>
 
                 <h3 className="text-xl font-semibold">{item.title}</h3>
-
                 <p className="mt-3 text-secondary">{item.desc}</p>
 
                 <span className="absolute right-6 top-6 text-4xl font-bold text-secondary">
@@ -136,154 +146,252 @@ export default function HomeView() {
       {/* FEATURED CARS */}
       <section className="bg-white py-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          {/* Header + Tabs */}
+          <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-4xl font-bold">Featured Cars</h2>
-
               <p className="mt-2 text-secondary">
-                Inventaris pilihan dengan skor tinggi.
+                Inventaris pilihan berdasarkan skor ANP.
               </p>
+
+              {/* Tabs */}
+              <div className="mt-5 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
+                <TabButton
+                  active={featuredTab === 'bekas'}
+                  onClick={() => setFeaturedTab('bekas')}
+                  icon={<Gauge size={15} />}
+                  label="Mobil Bekas"
+                />
+                <TabButton
+                  active={featuredTab === 'baru'}
+                  onClick={() => setFeaturedTab('baru')}
+                  icon={<Sparkles size={15} />}
+                  label="Mobil Baru"
+                />
+              </div>
             </div>
 
             <Link
-              href={'/catalog'}
-              className="flex items-center gap-2 text-primary font-semibold hover:border-b duration-150 pb-1 transition-transform"
+              href={featuredTab === 'bekas' ? '/catalog' : '/catalog?tab=baru'}
+              className="flex items-center gap-2 pb-1 font-semibold text-primary transition-transform duration-150 hover:border-b"
             >
               Lihat Semua
               <ArrowUpRight size={18} />
             </Link>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {featuredCars.map((car) => (
-              <div
-                key={car.id}
-                className="overflow-hidden rounded-2xl border bg-white transition hover:shadow-lg"
-              >
-                <div className="relative h-56">
-                  <Image
-                    src={car.imageUrl}
-                    alt={car.name}
-                    fill
-                    className="object-cover"
-                  />
+          {/* Used Cars */}
+          {featuredTab === 'bekas' && (
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+              {cars.length === 0 && (
+                <p className="col-span-3 text-center text-secondary py-12">
+                  Belum ada data mobil bekas.
+                </p>
+              )}
+              {cars.map((car) => (
+                <UsedCarCard key={car._id} car={car} />
+              ))}
+            </div>
+          )}
 
-                  {car.badge && (
-                    <div className="absolute left-4 top-4 rounded-lg bg-primary px-3 py-1 text-xs font-semibold text-white">
-                      {car.badge}
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-6">
-                  <div className="mb-4 flex justify-between gap-4">
-                    <div>
-                      <h3 className="font-semibold">{car.name}</h3>
-
-                      <p className="text-sm text-secondary">{car.variant}</p>
-                    </div>
-
-                    <span className="rounded-lg bg-slate-100 px-3 py-1 text-sm">
-                      {formatPrice(car.price)}
-                    </span>
-                  </div>
-
-                  <div className="mb-6 grid grid-cols-3 gap-3 text-xs text-secondary">
-                    <div className="flex items-center gap-1">
-                      <Gauge size={14} />
-                      {car.mileage.toLocaleString()} KM
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <Settings size={14} />
-                      {car.transmission}
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      {car.fuelType === 'Electric' ? (
-                        <Zap size={14} />
-                      ) : (
-                        <Fuel size={14} />
-                      )}
-                      {car.fuelType}
-                    </div>
-                  </div>
-
-                  <Link
-                    href={`/cars/${car.id}`}
-                    className="w-full rounded-xl border p-2 text-sm font-medium hover:border-primary hover:text-primary"
-                  >
-                    Detail Kendaraan
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* New Cars */}
+          {featuredTab === 'baru' && (
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+              {topNewCars.length === 0 && (
+                <p className="col-span-3 text-center text-secondary py-12">
+                  Belum ada data mobil baru.
+                </p>
+              )}
+              {topNewCars.map((item) => (
+                <NewCarCard key={item.data_cars._id} item={item} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* BENEFITS */}
-      <section className="bg-primary py-24 text-white rounded-lg shadow-md">
+      <section className="rounded-lg bg-primary py-24 text-white shadow-md">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center">
             <h2 className="text-4xl font-bold">Kenapa AutoANP?</h2>
-
             <p className="mt-4 text-white/80">
               Keunggulan sistem dibanding platform konvensional.
             </p>
           </div>
 
-          <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {[
-              {
-                icon: Brain,
-                title: 'Analisis Cerdas',
-              },
-              {
-                icon: BadgeCheck,
-                title: 'Terverifikasi',
-              },
-              {
-                icon: Wallet,
-                title: 'Transparansi Harga',
-              },
-              {
-                icon: Headset,
-                title: 'Dukungan Ahli',
-              },
+              { icon: Brain, title: 'Analisis Cerdas' },
+              { icon: BadgeCheck, title: 'Terverifikasi' },
+              { icon: Wallet, title: 'Transparansi Harga' },
             ].map((item) => (
               <div key={item.title} className="text-center">
                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/10">
                   <item.icon size={30} />
                 </div>
-
                 <h3 className="text-xl font-semibold">{item.title}</h3>
               </div>
             ))}
           </div>
         </div>
       </section>
+    </div>
+  );
+}
 
-      {/* CTA */}
-      {/* <section className="bg-white py-24">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-5xl font-bold">Siap Memilih dengan Presisi?</h2>
+/* ─── Sub-components ──────────────────────────────────────────── */
 
-          <p className="mt-6 text-lg text-secondary">
-            Temukan kendaraan terbaik berdasarkan metode ANP.
-          </p>
+function TabButton({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition ${
+        active
+          ? 'bg-white text-primary shadow-sm'
+          : 'text-secondary hover:text-foreground'
+      }`}
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
 
-          <div className="mt-12 flex flex-col justify-center gap-4 sm:flex-row">
-            <button className="rounded-2xl bg-primary px-10 py-5 font-semibold text-white">
-              Daftar Sekarang
-            </button>
+function UsedCarCard({ car }: { car: ApiCar }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border bg-white transition hover:shadow-lg">
+      <div className="relative h-56">
+        <Image
+          src={getCarImageUrl(car.image_url)}
+          alt={`${car.brand} ${car.model}`}
+          fill
+          className="object-cover"
+        />
+        <div className="absolute left-4 top-4 rounded-lg bg-primary px-3 py-1 text-xs font-semibold text-white">
+          Bekas
+        </div>
+      </div>
 
-            <button className="rounded-2xl border px-10 py-5 font-semibold">
-              Hubungi Sales
-            </button>
+      <div className="p-6">
+        <div className="mb-4 flex justify-between gap-4">
+          <div>
+            <h3 className="font-semibold">
+              {car.brand} {car.model}
+            </h3>
+            <p className="text-sm text-secondary">{car.year}</p>
+          </div>
+          <span className="rounded-lg bg-slate-100 px-3 py-1 text-sm">
+            {formatPrice(car.price)}
+          </span>
+        </div>
+
+        <div className="mb-6 grid grid-cols-3 gap-3 text-xs text-secondary">
+          <div className="flex items-center gap-1">
+            <Gauge size={14} />
+            {car.mileage.toLocaleString()} KM
+          </div>
+          <div className="flex items-center gap-1">
+            <Settings size={14} />
+            {car.transmission}
+          </div>
+          <div className="flex items-center gap-1">
+            {car.fuel_type === 'electric' ? (
+              <Zap size={14} />
+            ) : (
+              <Fuel size={14} />
+            )}
+            {car.fuel_type}
           </div>
         </div>
-      </section> */}
+
+        <Link
+          href={`/cars/${car._id}`}
+          className="block w-full rounded-xl border p-2 text-center text-sm font-medium hover:border-primary hover:text-primary"
+        >
+          Detail Kendaraan
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function NewCarCard({ item }: { item: NewCarAnpRanking }) {
+  const { data_cars: car, final_score, rank_position } = item;
+
+  return (
+    <div className="overflow-hidden rounded-2xl border bg-white transition hover:shadow-lg">
+      <div className="relative h-56">
+        <Image
+          src={getCarImageUrl(car.image_url)}
+          alt={`${car.brand} ${car.model}`}
+          fill
+          className="object-cover"
+        />
+        <div className="absolute left-4 top-4 rounded-lg bg-green-500 px-3 py-1 text-xs font-semibold text-white">
+          Baru
+        </div>
+        <div className="absolute right-4 top-4 rounded-lg bg-black/50 px-3 py-1 text-xs font-semibold text-white">
+          #{rank_position}
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="mb-4 flex justify-between gap-4">
+          <div>
+            <h3 className="font-semibold">
+              {car.brand} {car.model}
+            </h3>
+            <p className="text-sm text-secondary">{car.year}</p>
+          </div>
+          <span className="rounded-lg bg-slate-100 px-3 py-1 text-sm">
+            {formatPrice(car.price)}
+          </span>
+        </div>
+
+        <div className="mb-4 grid grid-cols-3 gap-3 text-xs text-secondary">
+          <div className="flex items-center gap-1">
+            <Settings size={14} />
+            {car.transmission}
+          </div>
+          <div className="flex items-center gap-1">
+            {car.fuel_type === 'electric' ? (
+              <Zap size={14} />
+            ) : (
+              <Fuel size={14} />
+            )}
+            {car.fuel_type}
+          </div>
+          <div className="flex items-center gap-1">
+            <Droplets size={14} />
+            {car.fuel_efficiency} L/100km
+          </div>
+        </div>
+
+        <div className="mb-4 flex items-center justify-between rounded-xl bg-blue-50 px-4 py-2">
+          <span className="text-xs text-secondary">ANP Score</span>
+          <span className="font-bold text-primary">
+            {final_score.toFixed(4)}
+          </span>
+        </div>
+
+        <Link
+          href={`/new-cars/${car._id}`}
+          className="block w-full rounded-xl border p-2 text-center text-sm font-medium hover:border-primary hover:text-primary"
+        >
+          Detail Mobil
+        </Link>
+      </div>
     </div>
   );
 }

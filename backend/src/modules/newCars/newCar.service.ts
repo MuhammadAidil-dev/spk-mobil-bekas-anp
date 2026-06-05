@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { AppError } from '@/common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from '@/common/error/http';
 
@@ -6,7 +5,6 @@ import {
   normalizeMatrix,
   calculateEigenVector,
   calculateConsistencyRatio,
-  buildUnweightedSupermatrix,
   buildWeightedSupermatrix,
   buildLimitSupermatrix,
   extractFinalWeights,
@@ -22,10 +20,7 @@ import {
   NewCarListItem,
   UpdateNewCarDto,
 } from './newCar.type';
-import {
-  newCarANPResultRepository,
-  newCarRepository,
-} from './newCar.repository';
+import { newCarRepository } from './newCar.repository';
 import {
   NEW_CAR_CRITERIA,
   NEW_CAR_CRITERIA_COUNT,
@@ -80,7 +75,7 @@ interface AnpCalculationResult {
 // MAPPER — INewCar → NewCarListItem / NewCarDetail
 // ============================================================
 const toListItem = (car: INewCar): NewCarListItem => ({
-  id: (car._id as { toString(): string }).toString(),
+  _id: (car._id as { toString(): string }).toString(),
   brand: car.brand,
   model: car.model,
   year: car.year,
@@ -98,7 +93,7 @@ const toListItem = (car: INewCar): NewCarListItem => ({
 
 const toDetail = (car: INewCar): NewCarDetail => ({
   ...toListItem(car),
-  created_by: car.created_by.toString(),
+  created_by: car.created_by?.toString() ?? null,
   updated_by: car.updated_by?.toString() ?? null,
   created_at: car.created_at,
   updated_at: car.updated_at,

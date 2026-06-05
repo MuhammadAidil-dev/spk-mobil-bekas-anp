@@ -52,6 +52,29 @@ class CarController {
     });
   }
 
+  async updateCarController(req: Request, res: Response<ApiResponse<ICar>>) {
+    const { id } = req.params;
+    const payload = res.locals.body as Partial<import('./car.type').UpdateCarDTO>;
+    const authUser = (req as any).user;
+    const existing = await carService.getCarByIdAdminService(id);
+
+    const imageUrl = (req as any).file?.filename
+      ? (req as any).file.filename
+      : (payload.image_url ?? existing.image_url ?? '');
+
+    const result = await carService.updateCarService(
+      id,
+      { ...payload, image_url: imageUrl },
+      authUser.sub,
+    );
+
+    res.status(HTTP_CODE.OK).json({
+      success: true,
+      message: 'Berhasil memperbarui data mobil',
+      data: result,
+    });
+  }
+
   async deleteCarController(req: Request, res: Response<ApiResponse<ICar>>) {
     const { id } = req.params;
 

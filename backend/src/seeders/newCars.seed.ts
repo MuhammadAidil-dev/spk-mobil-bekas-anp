@@ -7,7 +7,7 @@ import { NewCarModel } from '@/modules/newCars/newCar.model';
 
 const env = loadEnv();
 
-export const newCarSeedData = [
+export const newCarSeed = [
   {
     brand: 'Toyota',
     model: 'Avanza 1.5 G CVT',
@@ -19,7 +19,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'White',
-    image_url: 'https://example.com/avanza.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
     description: 'MPV keluarga populer dengan kabin luas.',
   },
   {
@@ -33,7 +34,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'Black',
-    image_url: 'https://example.com/veloz.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80',
     description: 'MPV premium dengan fitur lengkap.',
   },
   {
@@ -43,11 +45,12 @@ export const newCarSeedData = [
     price: 440000000,
     engine_capacity: 1490,
     seat_capacity: 5,
-    fuel_efficiency: 30.0,
+    fuel_efficiency: 30,
     transmission: 'automatic',
     fuel_type: 'hybrid',
     color: 'Silver',
-    image_url: 'https://example.com/yaris-cross.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV hybrid hemat bahan bakar.',
   },
   {
@@ -61,7 +64,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'Yellow',
-    image_url: 'https://example.com/brio.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
     description: 'City car lincah dan irit.',
   },
   {
@@ -75,7 +79,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'Red',
-    image_url: 'https://example.com/wrv.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80',
     description: 'Compact SUV modern.',
   },
   {
@@ -89,7 +94,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'White',
-    image_url: 'https://example.com/hrv.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV premium dengan desain elegan.',
   },
   {
@@ -103,7 +109,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'Gray',
-    image_url: 'https://example.com/xpander.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80',
     description: 'MPV favorit keluarga Indonesia.',
   },
   {
@@ -117,7 +124,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'White',
-    image_url: 'https://example.com/xforce.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV kompak dengan fitur modern.',
   },
   {
@@ -131,7 +139,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'hybrid',
     color: 'Black',
-    image_url: 'https://example.com/ertiga.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1200&q=80',
     description: 'MPV hybrid ekonomis.',
   },
   {
@@ -145,7 +154,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'hybrid',
     color: 'Orange',
-    image_url: 'https://example.com/xl7.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV keluarga dengan teknologi hybrid.',
   },
   {
@@ -159,7 +169,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'Silver',
-    image_url: 'https://example.com/sigra.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80',
     description: 'MPV LCGC ekonomis.',
   },
   {
@@ -173,7 +184,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'Red',
-    image_url: 'https://example.com/rocky.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV kompak hemat bahan bakar.',
   },
   {
@@ -187,7 +199,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'White',
-    image_url: 'https://example.com/stargazer.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80',
     description: 'MPV futuristik dengan fitur ADAS.',
   },
   {
@@ -201,7 +214,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'gasoline',
     color: 'Black',
-    image_url: 'https://example.com/creta.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV modern dengan fitur lengkap.',
   },
   {
@@ -215,7 +229,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'electric',
     color: 'Gray',
-    image_url: 'https://example.com/ioniq5.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV listrik premium.',
   },
   {
@@ -229,7 +244,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'electric',
     color: 'Blue',
-    image_url: 'https://example.com/airev.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1593941707882-a56bbc8df843?auto=format&fit=crop&w=1200&q=80',
     description: 'Mobil listrik perkotaan.',
   },
   {
@@ -243,7 +259,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'electric',
     color: 'Green',
-    image_url: 'https://example.com/binguo.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1609521263047-f8f205293f24?auto=format&fit=crop&w=1200&q=80',
     description: 'EV hatchback dengan desain retro.',
   },
   {
@@ -257,7 +274,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'electric',
     color: 'White',
-    image_url: 'https://example.com/atto3.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1626668893632-6f3a4466d22f?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV listrik global BYD.',
   },
   {
@@ -271,7 +289,8 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'electric',
     color: 'Blue',
-    image_url: 'https://example.com/seal.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1200&q=80',
     description: 'Sedan listrik performa tinggi.',
   },
   {
@@ -285,13 +304,14 @@ export const newCarSeedData = [
     transmission: 'automatic',
     fuel_type: 'electric',
     color: 'Silver',
-    image_url: 'https://example.com/omodae5.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=1200&q=80',
     description: 'SUV listrik modern dan kompetitif.',
   },
 ];
 
 const up = async () => {
-  for (const data of newCarSeedData) {
+  for (const data of newCarSeed) {
     await NewCarModel.create(data);
   }
 };

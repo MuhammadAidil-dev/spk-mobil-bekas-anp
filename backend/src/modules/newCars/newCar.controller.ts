@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { HTTP_CODE } from '@/common/error/http';
 import { Types } from 'mongoose';
 import { newCarService } from './newCar.service';
-import { createNewCarSchema, updateNewCarSchema } from './newCar.validation';
 import { CreateNewCarDto } from './newCar.type';
 
 // ============================================================
@@ -38,38 +37,49 @@ class NewCarController {
   // ----------------------------------------------------------
   // POST /new-cars (Admin)
   // ----------------------------------------------------------
-  //   create = async (req: Request, res: Response): Promise<void> => {
-  //     const payload = res.locals.body as CreateNewCarDto;
+  create = async (req: Request, res: Response): Promise<void> => {
+    const payload = res.locals.body as CreateNewCarDto;
 
-  //     const data = await newCarService.create({
-  //       ...payload,
-  //       created_by: new Types.ObjectId(req.user!.id),
-  //     });
+    const user = (req as any).user as { id: string };
+    const imageUrl = (req as any).file?.filename ?? payload.image_url ?? '';
 
-  //     res.status(HTTP_CODE.CREATED).json({
-  //       success: true,
-  //       message: 'Mobil baru berhasil ditambahkan',
-  //       data,
-  //     });
-  //   };
+    const data = await newCarService.create({
+      ...payload,
+      image_url: imageUrl,
+      created_by: user?.id ? new Types.ObjectId(user.id) : null,
+    });
+
+    res.status(HTTP_CODE.CREATED).json({
+      success: true,
+      message: 'Mobil baru berhasil ditambahkan',
+      data,
+    });
+  };
 
   // ----------------------------------------------------------
   // PATCH /new-cars/:id (Admin)
   // ----------------------------------------------------------
-  //   update = async (req: Request, res: Response): Promise<void> => {
-  //     const body = updateNewCarSchema.parse(req.body);
+  update = async (req: Request, res: Response): Promise<void> => {
+    const payload = res.locals.body as Partial<import('./newCar.type').UpdateNewCarDto>;
+    const user = (req as any).user as { id: string };
+    const existingCar = await newCarService.findById(req.params.id);
 
-  //     const data = await newCarService.update(req.params.id, {
-  //       ...body,
-  //       updated_by: new Types.ObjectId(req.user!.id),
-  //     });
+    const imageUrl = (req as any).file?.filename
+      ? (req as any).file.filename
+      : (payload.image_url ?? existingCar.image_url);
 
-  //     res.status(HTTP_CODE.OK).json({
-  //       success: true,
-  //       message: 'Mobil baru berhasil diperbarui',
-  //       data,
-  //     });
-  //   };
+    const data = await newCarService.update(req.params.id, {
+      ...payload,
+      image_url: imageUrl,
+      updated_by: new Types.ObjectId(user.id),
+    });
+
+    res.status(HTTP_CODE.OK).json({
+      success: true,
+      message: 'Mobil baru berhasil diperbarui',
+      data,
+    });
+  };
 
   // ----------------------------------------------------------
   // DELETE /new-cars/:id (Admin)

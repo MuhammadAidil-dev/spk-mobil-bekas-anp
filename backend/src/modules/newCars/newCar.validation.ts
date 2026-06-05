@@ -1,4 +1,14 @@
 import Joi from 'joi';
+import mongoose from 'mongoose';
+
+export const ValidIdNewCarSchema = Joi.object({
+  id: Joi.string().custom((value, helpers) => {
+    if (!mongoose.Types.ObjectId.isValid(value)) {
+      return helpers.error('any.invalid');
+    }
+    return value;
+  }),
+});
 
 // ============================================================
 // ENUMS
@@ -29,7 +39,6 @@ export const createNewCarSchema = Joi.object({
     .integer()
     .min(1900)
     .max(CURRENT_YEAR + 1)
-    .strict()
     .required()
     .messages({
       'number.base': 'Tahun harus berupa angka',
@@ -39,26 +48,26 @@ export const createNewCarSchema = Joi.object({
       'any.required': 'Tahun wajib diisi',
     }),
 
-  price: Joi.number().positive().strict().required().messages({
+  price: Joi.number().positive().required().messages({
     'number.base': 'Harga harus berupa angka',
     'number.positive': 'Harga harus lebih dari 0',
     'any.required': 'Harga wajib diisi',
   }),
 
-  engine_capacity: Joi.number().positive().strict().required().messages({
+  engine_capacity: Joi.number().positive().required().messages({
     'number.base': 'Kapasitas mesin harus berupa angka',
     'number.positive': 'Kapasitas mesin harus lebih dari 0',
     'any.required': 'Kapasitas mesin wajib diisi',
   }),
 
-  seat_capacity: Joi.number().integer().min(1).strict().required().messages({
+  seat_capacity: Joi.number().integer().min(1).required().messages({
     'number.base': 'Kapasitas kursi harus berupa angka',
     'number.integer': 'Kapasitas kursi harus berupa angka bulat',
     'number.min': 'Kapasitas kursi minimal 1',
     'any.required': 'Kapasitas kursi wajib diisi',
   }),
 
-  fuel_efficiency: Joi.number().positive().strict().required().messages({
+  fuel_efficiency: Joi.number().positive().required().messages({
     'number.base': 'Efisiensi BBM harus berupa angka',
     'number.positive': 'Efisiensi BBM harus lebih dari 0',
     'any.required': 'Efisiensi BBM wajib diisi',
@@ -86,10 +95,7 @@ export const createNewCarSchema = Joi.object({
     'any.required': 'Warna wajib diisi',
   }),
 
-  image_url: Joi.string().uri().trim().required().messages({
-    'string.uri': 'Format URL gambar tidak valid',
-    'any.required': 'URL gambar wajib diisi',
-  }),
+  image_url: Joi.string().trim().allow('').optional(),
 
   description: Joi.string().trim().required().messages({
     'string.empty': 'Deskripsi wajib diisi',
@@ -111,19 +117,15 @@ export const updateNewCarSchema = Joi.object({
 
   model: Joi.string().trim(),
 
-  year: Joi.number()
-    .integer()
-    .min(1900)
-    .max(CURRENT_YEAR + 1)
-    .strict(),
+  year: Joi.number().integer().min(1900).max(CURRENT_YEAR + 1),
 
-  price: Joi.number().positive().strict(),
+  price: Joi.number().positive(),
 
-  engine_capacity: Joi.number().positive().strict(),
+  engine_capacity: Joi.number().positive(),
 
-  seat_capacity: Joi.number().integer().min(1).strict(),
+  seat_capacity: Joi.number().integer().min(1),
 
-  fuel_efficiency: Joi.number().positive().strict(),
+  fuel_efficiency: Joi.number().positive(),
 
   transmission: Joi.string().valid(...TRANSMISSION_VALUES),
 
@@ -131,7 +133,7 @@ export const updateNewCarSchema = Joi.object({
 
   color: Joi.string().trim(),
 
-  image_url: Joi.string().uri().trim(),
+  image_url: Joi.string().trim().allow('').optional(),
 
   description: Joi.string().trim(),
 

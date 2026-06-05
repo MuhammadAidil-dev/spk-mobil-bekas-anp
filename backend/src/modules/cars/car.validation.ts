@@ -43,3 +43,22 @@ export const CreateCarSchema = Joi.object<CreateCarDTO>({
 
   description: Joi.string().trim().allow('').default(''),
 });
+
+export const UpdateCarSchema = Joi.object({
+  brand: Joi.string().trim(),
+  model: Joi.string().trim(),
+  year: Joi.number().integer().min(1990).max(new Date().getFullYear()),
+  price: Joi.number().positive(),
+  mileage: Joi.number().min(0),
+  engine_capacity: Joi.number().positive(),
+  seat_capacity: Joi.number().integer().min(1),
+  transmission: Joi.string().valid('manual', 'automatic'),
+  fuel_type: Joi.string().valid('gasoline', 'diesel', 'hybrid', 'electric'),
+  color: Joi.string().trim(),
+  plate_region: Joi.string().trim().allow(''),
+  image_url: Joi.string().trim().allow('').optional(),
+  description: Joi.string().trim().allow(''),
+  is_active: Joi.boolean(),
+})
+  .min(1)
+  .options({ abortEarly: false, allowUnknown: false });

@@ -11,7 +11,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Silver',
     plate_region: 'Riau',
-    image_url: 'https://example.com/avanza.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&h=600&fit=crop&auto=format',
     description: 'MPV irit dan cocok untuk keluarga.',
     is_active: true,
   },
@@ -27,7 +28,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Red',
     plate_region: 'Riau',
-    image_url: 'https://example.com/brio.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?w=800&h=600&fit=crop&auto=format',
     description: 'Hatchback kecil yang irit bahan bakar.',
     is_active: true,
   },
@@ -43,7 +45,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'White',
     plate_region: 'Riau',
-    image_url: 'https://example.com/xenia.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1494905998402-395d579af36f?w=800&h=600&fit=crop&auto=format',
     description: 'MPV keluarga dengan perawatan murah.',
     is_active: true,
   },
@@ -59,7 +62,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Grey',
     plate_region: 'Riau',
-    image_url: 'https://example.com/ertiga.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=800&h=600&fit=crop&auto=format',
     description: 'MPV nyaman dengan fitur modern.',
     is_active: true,
   },
@@ -75,7 +79,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Black',
     plate_region: 'Riau',
-    image_url: 'https://example.com/calya.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&h=600&fit=crop&auto=format',
     description: 'LMPV hemat dan cocok untuk keluarga muda.',
     is_active: true,
   },
@@ -91,7 +96,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Silver',
     plate_region: 'Riau',
-    image_url: 'https://example.com/mobilio.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=800&h=600&fit=crop&auto=format',
     description: 'MPV sporty dengan kabin luas.',
     is_active: true,
   },
@@ -107,7 +113,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'White',
     plate_region: 'Riau',
-    image_url: 'https://example.com/xpander.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1549924231-f129b911e442?w=800&h=600&fit=crop&auto=format',
     description: 'MPV modern dengan kenyamanan tinggi.',
     is_active: true,
   },
@@ -123,7 +130,8 @@ export const carSeed = [
     fuel_type: 'diesel',
     color: 'Black',
     plate_region: 'Riau',
-    image_url: 'https://example.com/innova.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&h=600&fit=crop&auto=format',
     description: 'MPV premium dan tangguh untuk perjalanan jauh.',
     is_active: true,
   },
@@ -139,7 +147,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Silver',
     plate_region: 'Riau',
-    image_url: 'https://example.com/apv.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&h=600&fit=crop&auto=format',
     description: 'MPV serbaguna untuk keluarga besar.',
     is_active: true,
   },
@@ -155,7 +164,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Blue',
     plate_region: 'Riau',
-    image_url: 'https://example.com/sigra.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1493238792000-8113da705763?w=800&h=600&fit=crop&auto=format',
     description: 'Mobil LCGC hemat bahan bakar.',
     is_active: true,
   },
@@ -171,7 +181,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Yellow',
     plate_region: 'Riau',
-    image_url: 'https://example.com/agya.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&h=600&fit=crop&auto=format',
     description: 'City car kecil dan lincah.',
     is_active: true,
   },
@@ -187,7 +198,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Red',
     plate_region: 'Riau',
-    image_url: 'https://example.com/jazz.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&h=600&fit=crop&auto=format',
     description: 'Hatchback sporty dan stylish.',
     is_active: true,
   },
@@ -203,7 +215,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Grey',
     plate_region: 'Riau',
-    image_url: 'https://example.com/livina.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1483721310020-03333e577078?w=800&h=600&fit=crop&auto=format',
     description: 'MPV nyaman untuk perjalanan keluarga.',
     is_active: true,
   },
@@ -219,7 +232,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'White',
     plate_region: 'Riau',
-    image_url: 'https://example.com/rush.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=800&h=600&fit=crop&auto=format',
     description: 'SUV kompak dengan tampilan gagah.',
     is_active: true,
   },
@@ -235,7 +249,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Black',
     plate_region: 'Riau',
-    image_url: 'https://example.com/terios.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=800&h=600&fit=crop&auto=format',
     description: 'SUV tangguh untuk segala medan.',
     is_active: true,
   },
@@ -251,7 +266,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Orange',
     plate_region: 'Riau',
-    image_url: 'https://example.com/ignis.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?w=800&h=600&fit=crop&auto=format',
     description: 'City car unik dengan desain compact SUV.',
     is_active: true,
   },
@@ -267,7 +283,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'Red',
     plate_region: 'Riau',
-    image_url: 'https://example.com/yaris.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&h=600&fit=crop&auto=format',
     description: 'Hatchback sporty dan responsif.',
     is_active: true,
   },
@@ -283,7 +300,8 @@ export const carSeed = [
     fuel_type: 'gasoline',
     color: 'White',
     plate_region: 'Riau',
-    image_url: 'https://example.com/hrv.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1549924231-f129b911e442?w=800&h=600&fit=crop&auto=format',
     description: 'SUV compact premium.',
     is_active: true,
   },
@@ -299,7 +317,8 @@ export const carSeed = [
     fuel_type: 'diesel',
     color: 'Black',
     plate_region: 'Riau',
-    image_url: 'https://example.com/pajero.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&h=600&fit=crop&auto=format',
     description: 'SUV premium untuk medan berat.',
     is_active: true,
   },
@@ -315,7 +334,8 @@ export const carSeed = [
     fuel_type: 'diesel',
     color: 'Grey',
     plate_region: 'Riau',
-    image_url: 'https://example.com/fortuner.jpg',
+    image_url:
+      'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop&auto=format',
     description: 'SUV gagah dan berkelas.',
     is_active: true,
   },
