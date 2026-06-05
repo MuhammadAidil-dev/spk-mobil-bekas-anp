@@ -39,7 +39,6 @@ export type CreateCarDTO = Pick<
   | 'brand'
   | 'model'
   | 'year'
-  | 'year'
   | 'price'
   | 'mileage'
   | 'engine_capacity'
@@ -51,3 +50,21 @@ export type CreateCarDTO = Pick<
   | 'image_url'
   | 'description'
 >;
+
+export interface UpdateCarDTO {
+  brand?: string;
+  model?: string;
+  year?: number;
+  price?: number;
+  mileage?: number;
+  engine_capacity?: number;
+  seat_capacity?: number;
+  transmission?: 'manual' | 'automatic';
+  fuel_type?: 'gasoline' | 'diesel' | 'hybrid' | 'electric';
+  color?: string;
+  plate_region?: string;
+  image_url?: string;
+  description?: string;
+  is_active?: boolean;
+  updated_by?: Types.ObjectId;
+}

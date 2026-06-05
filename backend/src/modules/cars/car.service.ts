@@ -1,6 +1,6 @@
 import { AppError } from '@/common/error/appError';
 import { carRepository } from './car.repository';
-import { CreateCarDTO, ICar } from './car.type';
+import { CreateCarDTO, ICar, UpdateCarDTO } from './car.type';
 import { ERROR_CODE, HTTP_CODE } from '@/common/error/http';
 import { deleteImageFile } from '@/common/lib/multer';
 
@@ -54,6 +54,36 @@ class CarService {
     const newCar = await carRepository.addCar(payload, adminId);
 
     return newCar;
+  }
+
+  async getCarByIdAdminService(id: string): Promise<ICar> {
+    const result = await carRepository.findCarByIdAdmin(id);
+    if (!result) {
+      throw new AppError('Data mobil tidak ditemukan', HTTP_CODE.NOT_FOUND, ERROR_CODE.NOT_FOUND);
+    }
+    return result;
+  }
+
+  async updateCarService(id: string, payload: UpdateCarDTO, adminId: string): Promise<ICar> {
+    if (!id) {
+      throw new AppError('Id car tidak ditemukan', HTTP_CODE.BAD_REQUEST, ERROR_CODE.BAD_REQUEST);
+    }
+
+    const existing = await carRepository.findCarByIdAdmin(id);
+    if (!existing) {
+      throw new AppError('Data mobil tidak ditemukan', HTTP_CODE.NOT_FOUND, ERROR_CODE.NOT_FOUND);
+    }
+
+    const updated = await carRepository.updateCar(id, {
+      ...payload,
+      updated_by: adminId as any,
+    });
+
+    if (!updated) {
+      throw new AppError('Gagal memperbarui data mobil', HTTP_CODE.INTERNAL_SERVER, ERROR_CODE.INTERNAL_SERVER);
+    }
+
+    return updated;
   }
 
   async deleteCarService(id: string): Promise<ICar> {

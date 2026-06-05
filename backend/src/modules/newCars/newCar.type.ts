@@ -83,7 +83,7 @@ export interface UpdateNewCarDto {
 // SERVICE RETURN TYPES
 // ============================================================
 export interface NewCarListItem {
-  id: string;
+  _id: string;
   brand: string;
   model: string;
   year: number;
@@ -100,7 +100,7 @@ export interface NewCarListItem {
 }
 
 export interface NewCarDetail extends NewCarListItem {
-  created_by: string;
+  created_by: string | null;
   updated_by: string | null;
   created_at: Date;
   updated_at: Date;
