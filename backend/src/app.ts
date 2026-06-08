@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { errorMiddleware } from './middleware/errorMiddleware';
+import requestLogger from './middleware/requestLogger';
 import { loadEnv } from './config/env';
 import { AppError } from './common/error/appError';
 import { ERROR_CODE, HTTP_CODE } from './common/error/http';
@@ -16,6 +17,7 @@ const env = loadEnv();
 const app: Application = express();
 
 // Middleware
+app.use(requestLogger);
 app.use(cookieParser());
 app.use(express.json());
 app.use(
