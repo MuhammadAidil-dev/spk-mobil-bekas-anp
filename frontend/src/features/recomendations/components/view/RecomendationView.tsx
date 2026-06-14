@@ -5,12 +5,14 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Gauge, Sparkles, Droplets, Eye, TrendingDown, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import type { AnpResult, NewCarAnpResult } from '@/types/api.type';
+import type { AnpPreference, AnpResult, NewCarAnpResult } from '@/types/api.type';
 import { getCarImageUrl } from '@/lib/api';
+import PreferenceForm from '../PreferenceForm';
 
 interface RecomendationViewProps {
   anpData: AnpResult;
   newCarAnpData: NewCarAnpResult;
+  preference?: AnpPreference;
 }
 
 type Tab = 'bekas' | 'baru';
@@ -25,6 +27,7 @@ const formatPrice = (value: number) =>
 export default function RecomendationView({
   anpData,
   newCarAnpData,
+  preference,
 }: RecomendationViewProps) {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get('tab') as Tab) ?? 'bekas';
@@ -42,9 +45,14 @@ export default function RecomendationView({
             Hasil perhitungan Analytic Network Process (ANP) berdasarkan
             berbagai kriteria teknis dan harga.
           </p>
+        </section>
 
-          {/* Tabs */}
-          <div className="mt-6 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
+        {/* Preference Form */}
+        <PreferenceForm preference={preference} />
+
+        {/* Tabs */}
+        <section className="mb-8">
+          <div className="flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
             <button
               onClick={() => setActiveTab('bekas')}
               className={`flex items-center gap-1.5 rounded-lg px-4 py-2 sm:px-5 sm:py-2.5 text-sm font-medium transition ${

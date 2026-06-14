@@ -2,6 +2,7 @@ import apiClient, { parseAxiosError } from '@/lib/axios';
 import { ok, type ApiResponse } from '@/lib/api-response';
 import { getServerAuthHeaders } from '@/lib/auth';
 import type {
+  AnpPreference,
   ApiNewCar,
   BackendResponse,
   NewCarAnpResult,
@@ -79,11 +80,18 @@ export async function deleteNewCar(id: string): Promise<ApiResponse<null>> {
   }
 }
 
-export async function getNewCarAnpResult(): Promise<ApiResponse<NewCarAnpResult>> {
+export async function getNewCarAnpResult(preference?: AnpPreference): Promise<ApiResponse<NewCarAnpResult>> {
   try {
-    const { data } = await apiClient.get<BackendResponse<NewCarAnpResult>>(
-      '/new-cars/calculate-new-cars',
-    );
+    const params = new URLSearchParams();
+    if (preference?.minPrice !== undefined) params.set('minPrice', String(preference.minPrice));
+    if (preference?.maxPrice !== undefined) params.set('maxPrice', String(preference.maxPrice));
+    if (preference?.minYear !== undefined) params.set('minYear', String(preference.minYear));
+    if (preference?.maxYear !== undefined) params.set('maxYear', String(preference.maxYear));
+
+    const url = params.size
+      ? `/new-cars/calculate-new-cars?${params}`
+      : '/new-cars/calculate-new-cars';
+    const { data } = await apiClient.get<BackendResponse<NewCarAnpResult>>(url);
     return ok(data.data);
   } catch (err) {
     return parseAxiosError(err);

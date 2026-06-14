@@ -1,3 +1,10 @@
+export interface AnpPreference {
+  minPrice?: number;
+  maxPrice?: number;
+  minYear?: number;
+  maxYear?: number;
+}
+
 export type Transmission = 'manual' | 'automatic';
 export type FuelType = 'gasoline' | 'diesel' | 'hybrid' | 'electric';
 
