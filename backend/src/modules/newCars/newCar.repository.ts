@@ -7,6 +7,13 @@ import {
 } from './newCar.type';
 import { NewCarANPResultModel, NewCarModel } from './newCar.model';
 
+export interface NewCarFilter {
+  minPrice?: number;
+  maxPrice?: number;
+  minYear?: number;
+  maxYear?: number;
+}
+
 // ============================================================
 // NEW CAR REPOSITORY
 // ============================================================
@@ -22,8 +29,24 @@ class NewCarRepository {
     return NewCarModel.find().sort({ created_at: -1 }).lean();
   }
 
-  async findActive(): Promise<INewCar[]> {
-    return NewCarModel.find({ is_active: true }).lean();
+  async findActive(filter?: NewCarFilter): Promise<INewCar[]> {
+    const query: Record<string, unknown> = { is_active: true };
+
+    if (filter?.minPrice !== undefined || filter?.maxPrice !== undefined) {
+      const priceFilter: Record<string, number> = {};
+      if (filter?.minPrice !== undefined) priceFilter.$gte = filter.minPrice;
+      if (filter?.maxPrice !== undefined) priceFilter.$lte = filter.maxPrice;
+      query.price = priceFilter;
+    }
+
+    if (filter?.minYear !== undefined || filter?.maxYear !== undefined) {
+      const yearFilter: Record<string, number> = {};
+      if (filter?.minYear !== undefined) yearFilter.$gte = filter.minYear;
+      if (filter?.maxYear !== undefined) yearFilter.$lte = filter.maxYear;
+      query.year = yearFilter;
+    }
+
+    return NewCarModel.find(query).lean();
   }
 
   async findById(id: string): Promise<INewCar | null> {

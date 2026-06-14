@@ -20,7 +20,7 @@ import {
   NewCarListItem,
   UpdateNewCarDto,
 } from './newCar.type';
-import { newCarRepository } from './newCar.repository';
+import { newCarRepository, NewCarFilter } from './newCar.repository';
 import {
   NEW_CAR_CRITERIA,
   NEW_CAR_CRITERIA_COUNT,
@@ -169,9 +169,9 @@ class NewCarService {
   //   - Dependency: ENGINE→PRICE, ENGINE→FUEL, FUEL→PRICE, SEAT→PRICE
   //   - FUEL adalah kriteria benefit (semakin tinggi = lebih baik)
   // ----------------------------------------------------------
-  async calculateRanking(): Promise<AnpCalculationResult> {
+  async calculateRanking(filter?: NewCarFilter): Promise<AnpCalculationResult> {
     // Ambil data mobil aktif
-    const cars = await newCarRepository.findActive();
+    const cars = await newCarRepository.findActive(filter);
 
     if (!cars.length) {
       throw new AppError(

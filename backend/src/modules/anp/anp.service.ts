@@ -21,7 +21,7 @@ import {
   Matrix,
 } from './anp.helper';
 
-import { anpRepository } from './anp.repository';
+import { anpRepository, AnpFilter } from './anp.repository';
 import { criteriaRepository } from '../criteria/criteria.repository';
 import { ICar } from '../cars/car.type';
 
@@ -69,12 +69,12 @@ interface AnpCalculationResult {
 // ANP SERVICE
 // ============================================================
 class AnpService {
-  async calculateRanking(): Promise<AnpCalculationResult> {
+  async calculateRanking(filter?: AnpFilter): Promise<AnpCalculationResult> {
     // ----------------------------------------------------------
     // Ambil data dari DB
     // ----------------------------------------------------------
     const [cars, criteria] = await Promise.all([
-      anpRepository.findActiveCars(),
+      anpRepository.findActiveCars(filter),
       criteriaRepository.findAll(),
     ]);
 
