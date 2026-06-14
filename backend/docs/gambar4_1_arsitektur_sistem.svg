@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="560" font-family="Arial, sans-serif">
+
+  <!-- Background -->
+  <rect width="800" height="560" fill="#f8f9fa" rx="8"/>
+
+  <!-- Title -->
+  <text x="400" y="38" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a2e">Diagram Arsitektur Sistem SPK Pemilihan Mobil Berbasis Web</text>
+  <line x1="80" y1="46" x2="720" y2="46" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- ===== LAYER 1: PENGGUNA ===== -->
+  <rect x="60" y="62" width="680" height="84" fill="#e8f4fd" rx="6" stroke="#3498db" stroke-width="1.5"/>
+  <text x="75" y="80" font-size="11" font-weight="bold" fill="#1a5276">Lapisan Pengguna (Client Layer)</text>
+
+  <!-- Admin box -->
+  <rect x="120" y="90" width="130" height="44" fill="#ffffff" rx="5" stroke="#3498db" stroke-width="1.2"/>
+  <text x="185" y="108" text-anchor="middle" font-size="11" fill="#1a5276">👤 Admin</text>
+  <text x="185" y="124" text-anchor="middle" font-size="10" fill="#555">Kelola Data Mobil</text>
+
+  <!-- User/Pengambil Keputusan box -->
+  <rect x="335" y="90" width="130" height="44" fill="#ffffff" rx="5" stroke="#3498db" stroke-width="1.2"/>
+  <text x="400" y="108" text-anchor="middle" font-size="11" fill="#1a5276">👤 Pengguna</text>
+  <text x="400" y="124" text-anchor="middle" font-size="10" fill="#555">Pengambil Keputusan</text>
+
+  <!-- Browser -->
+  <rect x="555" y="90" width="130" height="44" fill="#ffffff" rx="5" stroke="#3498db" stroke-width="1.2"/>
+  <text x="620" y="108" text-anchor="middle" font-size="11" fill="#1a5276">🌐 Web Browser</text>
+  <text x="620" y="124" text-anchor="middle" font-size="10" fill="#555">Chrome / Firefox</text>
+
+  <!-- Arrow down layer 1 to 2 -->
+  <line x1="400" y1="146" x2="400" y2="162" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="415" y="157" font-size="9" fill="#888">HTTP/HTTPS</text>
+
+  <!-- ===== LAYER 2: FRONTEND ===== -->
+  <rect x="60" y="162" width="680" height="84" fill="#eafaf1" rx="6" stroke="#27ae60" stroke-width="1.5"/>
+  <text x="75" y="180" font-size="11" font-weight="bold" fill="#1e8449">Lapisan Presentasi (Frontend Layer)</text>
+
+  <!-- Next.js box -->
+  <rect x="100" y="188" width="200" height="44" fill="#ffffff" rx="5" stroke="#27ae60" stroke-width="1.2"/>
+  <text x="200" y="206" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e8449">Next.js 14 (App Router)</text>
+  <text x="200" y="222" text-anchor="middle" font-size="10" fill="#555">Server &amp; Client Components</text>
+
+  <!-- Pages box -->
+  <rect x="330" y="188" width="200" height="44" fill="#ffffff" rx="5" stroke="#27ae60" stroke-width="1.2"/>
+  <text x="430" y="206" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e8449">Halaman Utama</text>
+  <text x="430" y="222" text-anchor="middle" font-size="10" fill="#555">Dashboard · Mobil · Rekomendasi</text>
+
+  <!-- Tailwind box -->
+  <rect x="560" y="188" width="150" height="44" fill="#ffffff" rx="5" stroke="#27ae60" stroke-width="1.2"/>
+  <text x="635" y="206" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e8449">Tailwind CSS</text>
+  <text x="635" y="222" text-anchor="middle" font-size="10" fill="#555">Responsive UI</text>
+
+  <!-- Arrow down layer 2 to 3 -->
+  <line x1="400" y1="246" x2="400" y2="262" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="415" y="257" font-size="9" fill="#888">REST API</text>
+
+  <!-- ===== LAYER 3: BACKEND ===== -->
+  <rect x="60" y="262" width="680" height="130" fill="#fef9e7" rx="6" stroke="#f39c12" stroke-width="1.5"/>
+  <text x="75" y="280" font-size="11" font-weight="bold" fill="#9a7d0a">Lapisan Logika Bisnis (Backend Layer) — Express.js</text>
+
+  <!-- Auth Module -->
+  <rect x="90" y="288" width="120" height="44" fill="#ffffff" rx="5" stroke="#f39c12" stroke-width="1.2"/>
+  <text x="150" y="306" text-anchor="middle" font-size="10" font-weight="bold" fill="#9a7d0a">Auth Module</text>
+  <text x="150" y="322" text-anchor="middle" font-size="9" fill="#555">JWT · Guard</text>
+
+  <!-- Cars Module -->
+  <rect x="228" y="288" width="120" height="44" fill="#ffffff" rx="5" stroke="#f39c12" stroke-width="1.2"/>
+  <text x="288" y="306" text-anchor="middle" font-size="10" font-weight="bold" fill="#9a7d0a">Cars Module</text>
+  <text x="288" y="322" text-anchor="middle" font-size="9" fill="#555">Bekas · Baru · CRUD</text>
+
+  <!-- ANP Module (highlighted) -->
+  <rect x="366" y="285" width="134" height="50" fill="#fff3cd" rx="5" stroke="#e67e22" stroke-width="2"/>
+  <text x="433" y="305" text-anchor="middle" font-size="10" font-weight="bold" fill="#784212">⚙ ANP Module</text>
+  <text x="433" y="320" text-anchor="middle" font-size="9" fill="#784212">Supermatrix · Limit</text>
+  <text x="433" y="333" text-anchor="middle" font-size="9" fill="#784212">Weighted Score</text>
+
+  <!-- Recommendation Module -->
+  <rect x="518" y="288" width="130" height="44" fill="#ffffff" rx="5" stroke="#f39c12" stroke-width="1.2"/>
+  <text x="583" y="306" text-anchor="middle" font-size="10" font-weight="bold" fill="#9a7d0a">Rekomendasi</text>
+  <text x="583" y="322" text-anchor="middle" font-size="9" fill="#555">Ranking · Output</text>
+
+  <!-- Internal arrows in backend layer -->
+  <line x1="210" y1="310" x2="228" y2="310" stroke="#f39c12" stroke-width="1" marker-end="url(#arrO)"/>
+  <line x1="348" y1="310" x2="366" y2="310" stroke="#f39c12" stroke-width="1" marker-end="url(#arrO)"/>
+  <line x1="500" y1="310" x2="518" y2="310" stroke="#f39c12" stroke-width="1" marker-end="url(#arrO)"/>
+
+  <!-- Description row -->
+  <rect x="90" y="344" width="558" height="36" fill="#fdebd0" rx="4" stroke="#f39c12" stroke-width="0.8"/>
+  <text x="369" y="358" text-anchor="middle" font-size="10" fill="#784212" font-weight="bold">Proses ANP: Matriks Perbandingan → Normalisasi → Eigenvector → Supermatrix → Limit Supermatrix → Skor Akhir</text>
+  <text x="369" y="372" text-anchor="middle" font-size="9" fill="#784212">Konsistensi (CR ≤ 0.1) · Dependency Antar Kriteria · Final Weight → Normalisasi Alternatif → Ranking</text>
+
+  <!-- Arrow down layer 3 to 4 -->
+  <line x1="400" y1="392" x2="400" y2="408" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="415" y="403" font-size="9" fill="#888">Mongoose ODM</text>
+
+  <!-- ===== LAYER 4: DATABASE ===== -->
+  <rect x="60" y="408" width="680" height="84" fill="#f5eef8" rx="6" stroke="#8e44ad" stroke-width="1.5"/>
+  <text x="75" y="426" font-size="11" font-weight="bold" fill="#6c3483">Lapisan Data (Database Layer)</text>
+
+  <!-- MongoDB -->
+  <rect x="120" y="434" width="160" height="44" fill="#ffffff" rx="5" stroke="#8e44ad" stroke-width="1.2"/>
+  <text x="200" y="452" text-anchor="middle" font-size="11" font-weight="bold" fill="#6c3483">🍃 MongoDB</text>
+  <text x="200" y="468" text-anchor="middle" font-size="10" fill="#555">NoSQL · Atlas / Lokal</text>
+
+  <!-- Collections -->
+  <rect x="310" y="434" width="160" height="44" fill="#ffffff" rx="5" stroke="#8e44ad" stroke-width="1.2"/>
+  <text x="390" y="452" text-anchor="middle" font-size="11" font-weight="bold" fill="#6c3483">Koleksi Data</text>
+  <text x="390" y="468" text-anchor="middle" font-size="10" fill="#555">cars · newcars · users</text>
+
+  <!-- Schema -->
+  <rect x="500" y="434" width="200" height="44" fill="#ffffff" rx="5" stroke="#8e44ad" stroke-width="1.2"/>
+  <text x="600" y="452" text-anchor="middle" font-size="11" font-weight="bold" fill="#6c3483">Mongoose Schema</text>
+  <text x="600" y="468" text-anchor="middle" font-size="10" fill="#555">Validasi · Indeks · Model</text>
+
+  <!-- Caption -->
+  <text x="400" y="518" text-anchor="middle" font-size="11" fill="#444">Gambar 4.1 Diagram Arsitektur Sistem SPK Pemilihan Mobil Menggunakan ANP</text>
+
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#888"/>
+    </marker>
+    <marker id="arrO" markerWidth="6" markerHeight="6" refX="5" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L6,2.5 z" fill="#f39c12"/>
+    </marker>
+  </defs>
+
+</svg>
