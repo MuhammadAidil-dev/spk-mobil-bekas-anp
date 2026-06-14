@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'SPK | Mobil Bekas',
   description:
     'Sistem Pendukung Keputusan pemilihan mobil bekas menggunakan metode ANP',
+  icons: {
+    icon: './icon.png',
+  },
 };
 
 export default function RootLayout({
