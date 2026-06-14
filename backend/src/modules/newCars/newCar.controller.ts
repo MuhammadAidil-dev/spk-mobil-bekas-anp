@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { HTTP_CODE } from '@/common/error/http';
 import { Types } from 'mongoose';
 import { newCarService } from './newCar.service';
+import { NewCarFilter } from './newCar.repository';
 import { CreateNewCarDto } from './newCar.type';
 
 // ============================================================
@@ -96,8 +97,18 @@ class NewCarController {
   // ----------------------------------------------------------
   // POST /new-cars/anp/calculate (Admin)
   // ----------------------------------------------------------
-  calculateANP = async (_req: Request, res: Response): Promise<void> => {
-    const data = await newCarService.calculateRanking();
+  calculateANP = async (req: Request, res: Response): Promise<void> => {
+    const { minPrice, maxPrice, minYear, maxYear } = req.query;
+
+    const filter: NewCarFilter = {};
+    if (minPrice) filter.minPrice = Number(minPrice);
+    if (maxPrice) filter.maxPrice = Number(maxPrice);
+    if (minYear) filter.minYear = Number(minYear);
+    if (maxYear) filter.maxYear = Number(maxYear);
+
+    const data = await newCarService.calculateRanking(
+      Object.keys(filter).length ? filter : undefined,
+    );
 
     res.status(HTTP_CODE.OK).json({
       success: true,
