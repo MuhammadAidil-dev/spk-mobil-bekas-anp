@@ -1,6 +1,6 @@
 import apiClient, { parseAxiosError } from '@/lib/axios';
 import { ok, type ApiResponse } from '@/lib/api-response';
-import type { AnpResult, BackendResponse } from '@/types/api.type';
+import type { AnpPreference, AnpResult, BackendResponse } from '@/types/api.type';
 
 export const EMPTY_ANP_RESULT: AnpResult = {
   consistency: {
@@ -13,9 +13,16 @@ export const EMPTY_ANP_RESULT: AnpResult = {
   rankings: [],
 };
 
-export async function getAnpResult(): Promise<ApiResponse<AnpResult>> {
+export async function getAnpResult(preference?: AnpPreference): Promise<ApiResponse<AnpResult>> {
   try {
-    const { data } = await apiClient.get<BackendResponse<AnpResult>>('/anp/calculate');
+    const params = new URLSearchParams();
+    if (preference?.minPrice !== undefined) params.set('minPrice', String(preference.minPrice));
+    if (preference?.maxPrice !== undefined) params.set('maxPrice', String(preference.maxPrice));
+    if (preference?.minYear !== undefined) params.set('minYear', String(preference.minYear));
+    if (preference?.maxYear !== undefined) params.set('maxYear', String(preference.maxYear));
+
+    const url = params.size ? `/anp/calculate?${params}` : '/anp/calculate';
+    const { data } = await apiClient.get<BackendResponse<AnpResult>>(url);
     return ok(data.data);
   } catch (err) {
     return parseAxiosError(err);
