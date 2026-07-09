@@ -13,5 +13,12 @@ export default async function ANPEnginePage() {
   const anpData = anpResult.success ? anpResult.data : EMPTY_ANP_RESULT;
   const newCarAnpData = newCarResult.success ? newCarResult.data : EMPTY_NEW_CAR_ANP_RESULT;
 
-  return <AnpEngineView anpData={anpData} newCarAnpData={newCarAnpData} />;
+  return (
+    <AnpEngineView
+      anpData={anpData}
+      newCarAnpData={newCarAnpData}
+      anpError={anpResult.success ? null : anpResult.error.message}
+      newCarAnpError={newCarResult.success ? null : newCarResult.error.message}
+    />
+  );
 }

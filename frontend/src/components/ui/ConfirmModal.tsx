@@ -8,6 +8,7 @@ interface ConfirmModalProps {
   message: string;
   confirmLabel?: string;
   isLoading?: boolean;
+  errorMessage?: string | null;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -18,6 +19,7 @@ export default function ConfirmModal({
   message,
   confirmLabel = 'Hapus',
   isLoading = false,
+  errorMessage,
   onConfirm,
   onCancel,
 }: ConfirmModalProps) {
@@ -52,6 +54,12 @@ export default function ConfirmModal({
             <p className="mt-1 text-sm text-slate-500">{message}</p>
           </div>
         </div>
+
+        {errorMessage && (
+          <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            {errorMessage}
+          </div>
+        )}
 
         {/* Actions */}
         <div className="mt-6 flex justify-end gap-3">
