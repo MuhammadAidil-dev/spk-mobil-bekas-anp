@@ -20,6 +20,8 @@ import type { AnpResult, NewCarAnpResult } from '@/types/api.type';
 interface AnpEngineViewProps {
   anpData: AnpResult;
   newCarAnpData: NewCarAnpResult;
+  anpError?: string | null;
+  newCarAnpError?: string | null;
 }
 
 type Tab = 'bekas' | 'baru';
@@ -27,24 +29,29 @@ type Tab = 'bekas' | 'baru';
 export default function AnpEngineView({
   anpData,
   newCarAnpData,
+  anpError,
+  newCarAnpError,
 }: AnpEngineViewProps) {
   const [activeTab, setActiveTab] = useState<Tab>('bekas');
   const [usedCarData, setUsedCarData] = useState<AnpResult>(anpData);
   const [newCarData, setNewCarData] = useState<NewCarAnpResult>(newCarAnpData);
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const [usedCarError, setUsedCarError] = useState<string | null>(anpError ?? null);
+  const [newCarError, setNewCarError] = useState<string | null>(newCarAnpError ?? null);
+  const error = activeTab === 'bekas' ? usedCarError : newCarError;
 
   function handleRecalculate() {
-    setError(null);
     startTransition(async () => {
       if (activeTab === 'bekas') {
+        setUsedCarError(null);
         const result = await recalculateAnpAction();
         if (result.success) setUsedCarData(result.data);
-        else setError(result.error.message);
+        else setUsedCarError(result.error.message);
       } else {
+        setNewCarError(null);
         const result = await recalculateNewCarAnpAction();
         if (result.success) setNewCarData(result.data);
-        else setError(result.error.message);
+        else setNewCarError(result.error.message);
       }
     });
   }

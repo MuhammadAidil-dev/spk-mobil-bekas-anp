@@ -26,6 +26,7 @@ export default function AdminNewCarsView({ cars }: AdminNewCarsViewProps) {
   const [isPending, startTransition] = useTransition();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [targetCar, setTargetCar] = useState<ApiNewCar | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
@@ -51,12 +52,18 @@ export default function AdminNewCarsView({ cars }: AdminNewCarsViewProps) {
   function cancelDelete() {
     setPendingDeleteId(null);
     setTargetCar(null);
+    setDeleteError(null);
   }
 
   function confirmDelete() {
     if (!pendingDeleteId) return;
+    setDeleteError(null);
     startTransition(async () => {
-      await deleteNewCarAction(pendingDeleteId);
+      const result = await deleteNewCarAction(pendingDeleteId);
+      if (!result.success) {
+        setDeleteError(result.error.message);
+        return;
+      }
       setPendingDeleteId(null);
       setTargetCar(null);
       router.refresh();
@@ -243,6 +250,7 @@ export default function AdminNewCarsView({ cars }: AdminNewCarsViewProps) {
         }
         confirmLabel="Hapus"
         isLoading={isPending}
+        errorMessage={deleteError}
         onConfirm={confirmDelete}
         onCancel={cancelDelete}
       />

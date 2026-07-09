@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { AlertCircle, SlidersHorizontal, X } from 'lucide-react';
 import type { AnpPreference } from '@/types/api.type';
 
 interface PreferenceFormProps {
@@ -32,10 +32,22 @@ export default function PreferenceForm({ preference }: PreferenceFormProps) {
     preference?.maxYear ? String(preference.maxYear) : '',
   );
 
+  const [formError, setFormError] = useState<string | null>(null);
+
   const hasActive = !!(preference?.minPrice || preference?.maxPrice || preference?.minYear || preference?.maxYear);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (minPrice && maxPrice && Number(minPrice) > Number(maxPrice)) {
+      setFormError('Harga minimum tidak boleh lebih besar dari harga maksimum.');
+      return;
+    }
+    if (minYear && maxYear && Number(minYear) > Number(maxYear)) {
+      setFormError('Tahun minimum tidak boleh lebih besar dari tahun maksimum.');
+      return;
+    }
+    setFormError(null);
 
     const params = new URLSearchParams();
     if (minPrice) params.set('minPrice', minPrice);
@@ -52,6 +64,7 @@ export default function PreferenceForm({ preference }: PreferenceFormProps) {
     setMaxPrice('');
     setMinYear('');
     setMaxYear('');
+    setFormError(null);
     router.push('/recomendations');
   };
 
@@ -79,6 +92,12 @@ export default function PreferenceForm({ preference }: PreferenceFormProps) {
       </div>
 
       <form onSubmit={handleSubmit}>
+        {formError && (
+          <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+            <AlertCircle size={14} className="shrink-0" />
+            {formError}
+          </div>
+        )}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* Min Price */}
           <div>

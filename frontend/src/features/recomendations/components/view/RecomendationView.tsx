@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Gauge, Sparkles, Droplets, Eye, TrendingDown, TrendingUp } from 'lucide-react';
+import { AlertCircle, Gauge, Sparkles, Droplets, Eye, TrendingDown, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import type { AnpPreference, AnpResult, NewCarAnpResult } from '@/types/api.type';
 import { getCarImageUrl } from '@/lib/api';
@@ -13,6 +13,8 @@ interface RecomendationViewProps {
   anpData: AnpResult;
   newCarAnpData: NewCarAnpResult;
   preference?: AnpPreference;
+  anpError?: string | null;
+  newCarAnpError?: string | null;
 }
 
 type Tab = 'bekas' | 'baru';
@@ -28,10 +30,13 @@ export default function RecomendationView({
   anpData,
   newCarAnpData,
   preference,
+  anpError,
+  newCarAnpError,
 }: RecomendationViewProps) {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get('tab') as Tab) ?? 'bekas';
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const activeError = activeTab === 'bekas' ? anpError : newCarAnpError;
 
   return (
     <div className="min-h-screen">
@@ -49,6 +54,14 @@ export default function RecomendationView({
 
         {/* Preference Form */}
         <PreferenceForm preference={preference} />
+
+        {/* Error */}
+        {activeError && (
+          <div className="mb-8 flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
+            <AlertCircle size={18} className="shrink-0" />
+            Gagal memuat hasil rekomendasi: {activeError}
+          </div>
+        )}
 
         {/* Tabs */}
         <section className="mb-8">
