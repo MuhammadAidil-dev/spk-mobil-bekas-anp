@@ -245,7 +245,7 @@ export const normalizeBenefit = (value: number, max: number): number => {
 };
 
 export const normalizeCost = (value: number, min: number): number => {
-  if (value === 0) return 0;
+  if (value === 0) return 1;
   return min / value;
 };
 
