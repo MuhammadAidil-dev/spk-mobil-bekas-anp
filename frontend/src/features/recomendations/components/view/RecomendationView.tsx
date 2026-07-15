@@ -14,7 +14,9 @@ interface RecomendationViewProps {
   newCarAnpData: NewCarAnpResult;
   preference?: AnpPreference;
   anpError?: string | null;
+  anpErrorStatus?: number;
   newCarAnpError?: string | null;
+  newCarAnpErrorStatus?: number;
 }
 
 type Tab = 'bekas' | 'baru';
@@ -31,12 +33,24 @@ export default function RecomendationView({
   newCarAnpData,
   preference,
   anpError,
+  anpErrorStatus,
   newCarAnpError,
+  newCarAnpErrorStatus,
 }: RecomendationViewProps) {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get('tab') as Tab) ?? 'bekas';
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const activeError = activeTab === 'bekas' ? anpError : newCarAnpError;
+  const activeErrorStatus =
+    activeTab === 'bekas' ? anpErrorStatus : newCarAnpErrorStatus;
+  const hasPreference = Boolean(preference && Object.keys(preference).length > 0);
+
+  // 404 dari backend berarti tidak ada mobil aktif yang cocok — bukan kegagalan
+  // sistem, jadi tidak perlu ditampilkan sebagai error merah.
+  const isNoMatchingData = activeErrorStatus === 404;
+  const noMatchMessage = hasPreference
+    ? 'Tidak ada mobil yang sesuai dengan preferensi pencarianmu. Coba longgarkan filter harga atau tahun.'
+    : 'Belum ada data mobil aktif untuk dihitung rekomendasinya.';
 
   return (
     <div className="min-h-screen">
@@ -56,7 +70,7 @@ export default function RecomendationView({
         <PreferenceForm preference={preference} />
 
         {/* Error */}
-        {activeError && (
+        {activeError && !isNoMatchingData && (
           <div className="mb-8 flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
             <AlertCircle size={18} className="shrink-0" />
             Gagal memuat hasil rekomendasi: {activeError}
@@ -91,8 +105,22 @@ export default function RecomendationView({
           </div>
         </section>
 
-        {activeTab === 'bekas' && <UsedCarRanking anpData={anpData} />}
-        {activeTab === 'baru' && <NewCarRanking newCarAnpData={newCarAnpData} />}
+        {activeTab === 'bekas' && (
+          <UsedCarRanking
+            anpData={anpData}
+            emptyMessage={
+              activeTab === 'bekas' && isNoMatchingData ? noMatchMessage : undefined
+            }
+          />
+        )}
+        {activeTab === 'baru' && (
+          <NewCarRanking
+            newCarAnpData={newCarAnpData}
+            emptyMessage={
+              activeTab === 'baru' && isNoMatchingData ? noMatchMessage : undefined
+            }
+          />
+        )}
       </div>
     </div>
   );
@@ -100,12 +128,20 @@ export default function RecomendationView({
 
 /* ─── Used Car Ranking ─────────────────────────────────────────── */
 
-function UsedCarRanking({ anpData }: { anpData: AnpResult }) {
+function UsedCarRanking({
+  anpData,
+  emptyMessage,
+}: {
+  anpData: AnpResult;
+  emptyMessage?: string;
+}) {
   const { rankings, consistency, weights } = anpData;
   const topCar = rankings[0];
 
   if (!topCar) {
-    return <EmptyState message="Belum ada data ranking mobil bekas." />;
+    return (
+      <EmptyState message={emptyMessage ?? 'Belum ada data ranking mobil bekas.'} />
+    );
   }
 
   return (
@@ -266,12 +302,20 @@ function UsedCarRanking({ anpData }: { anpData: AnpResult }) {
 
 /* ─── New Car Ranking ──────────────────────────────────────────── */
 
-function NewCarRanking({ newCarAnpData }: { newCarAnpData: NewCarAnpResult }) {
+function NewCarRanking({
+  newCarAnpData,
+  emptyMessage,
+}: {
+  newCarAnpData: NewCarAnpResult;
+  emptyMessage?: string;
+}) {
   const { rankings, consistency, weights } = newCarAnpData;
   const topItem = rankings[0];
 
   if (!topItem) {
-    return <EmptyState message="Belum ada data ranking mobil baru." />;
+    return (
+      <EmptyState message={emptyMessage ?? 'Belum ada data ranking mobil baru.'} />
+    );
   }
 
   const topCar = topItem.data_cars;
