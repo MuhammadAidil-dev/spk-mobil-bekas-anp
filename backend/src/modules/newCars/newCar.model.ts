@@ -71,7 +71,7 @@ const newCarSchema = new Schema<INewCar>(
     },
     created_by: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Admin',
       default: null,
     },
     updated_by: {

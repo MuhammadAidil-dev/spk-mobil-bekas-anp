@@ -56,7 +56,7 @@ class AuthService {
 
     // hilangkan password di user
 
-    const { password: _pw, ...filteredUser } = user.toObject();
+    const { password_hash: _passwordHash, ...filteredUser } = user.toObject();
 
     return {
       accessToken: token,
