@@ -43,7 +43,11 @@ export default async function RecomendationsPage({ searchParams }: PageProps) {
         newCarAnpData={newCarAnpData}
         preference={hasPreference ? preference : undefined}
         anpError={anpResult.success ? null : anpResult.error.message}
+        anpErrorStatus={anpResult.success ? undefined : anpResult.error.status}
         newCarAnpError={newCarResult.success ? null : newCarResult.error.message}
+        newCarAnpErrorStatus={
+          newCarResult.success ? undefined : newCarResult.error.status
+        }
       />
     </Suspense>
   );
