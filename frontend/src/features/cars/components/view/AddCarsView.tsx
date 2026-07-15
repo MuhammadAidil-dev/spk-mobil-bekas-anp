@@ -37,6 +37,11 @@ export default function AddCarsView() {
     setError(null);
 
     const formData = new FormData(formRef.current!);
+    const imageFile = formData.get('imageCar');
+    if (!(imageFile instanceof File) || imageFile.size === 0) {
+      setError('Foto mobil wajib diisi.');
+      return;
+    }
 
     startTransition(async () => {
       const result = await createCarAction(formData);
@@ -173,6 +178,7 @@ export default function AddCarsView() {
                       name="plate_region"
                       type="text"
                       placeholder="BM"
+                      required
                       className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-primary"
                     />
                   </Field>

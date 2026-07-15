@@ -67,6 +67,11 @@ export default function EditNewCarView({ car }: EditNewCarViewProps) {
     e.preventDefault();
     setError(null);
 
+    if (!imageFile && !car.image_url) {
+      setError('Foto mobil wajib diisi.');
+      return;
+    }
+
     const formData = new FormData(formRef.current!);
     if (imageFile) {
       formData.set('imageCar', imageFile);
