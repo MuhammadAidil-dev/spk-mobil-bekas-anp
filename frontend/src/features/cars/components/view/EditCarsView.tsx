@@ -65,6 +65,11 @@ export default function EditCarsView({ car }: EditCarsViewProps) {
     e.preventDefault();
     setError(null);
 
+    if (!imageFile && !car.image_url) {
+      setError('Foto mobil wajib diisi.');
+      return;
+    }
+
     const formData = new FormData(formRef.current!);
     if (imageFile) {
       formData.set('imageCar', imageFile);
@@ -165,7 +170,7 @@ export default function EditCarsView({ car }: EditCarsViewProps) {
                   </Field>
 
                   <Field label="Plate Region">
-                    <input name="plate_region" type="text" defaultValue={car.plate_region ?? ''}
+                    <input name="plate_region" type="text" defaultValue={car.plate_region ?? ''} required
                       className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-primary" />
                   </Field>
 

@@ -95,7 +95,7 @@ class CarService {
       );
     }
 
-    const result = await carRepository.findCarById(id);
+    const result = await carRepository.findCarByIdAdmin(id);
 
     if (!result) {
       throw new AppError(

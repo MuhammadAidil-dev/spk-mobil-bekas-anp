@@ -41,13 +41,13 @@ class NewCarController {
   create = async (req: Request, res: Response): Promise<void> => {
     const payload = res.locals.body as CreateNewCarDto;
 
-    const user = (req as any).user as { id: string };
+    const user = (req as any).user as { sub: string };
     const imageUrl = (req as any).file?.filename ?? payload.image_url ?? '';
 
     const data = await newCarService.create({
       ...payload,
       image_url: imageUrl,
-      created_by: user?.id ? new Types.ObjectId(user.id) : null,
+      created_by: user?.sub ? new Types.ObjectId(user.sub) : null,
     });
 
     res.status(HTTP_CODE.CREATED).json({
@@ -62,7 +62,7 @@ class NewCarController {
   // ----------------------------------------------------------
   update = async (req: Request, res: Response): Promise<void> => {
     const payload = res.locals.body as Partial<import('./newCar.type').UpdateNewCarDto>;
-    const user = (req as any).user as { id: string };
+    const user = (req as any).user as { sub: string };
     const existingCar = await newCarService.findById(req.params.id);
 
     const imageUrl = (req as any).file?.filename
@@ -72,7 +72,7 @@ class NewCarController {
     const data = await newCarService.update(req.params.id, {
       ...payload,
       image_url: imageUrl,
-      updated_by: new Types.ObjectId(user.id),
+      updated_by: new Types.ObjectId(user.sub),
     });
 
     res.status(HTTP_CODE.OK).json({
